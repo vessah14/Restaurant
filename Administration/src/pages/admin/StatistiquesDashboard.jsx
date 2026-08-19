@@ -14,25 +14,11 @@ import { statistiquesApi } from '../../api'
 // Data
 // ---------------------------------------------------------------------------
 
-const seriesMap = {
+const emptySeries = {
   Visiteurs: [],
   Réservations: [],
   Inscrits: []
 }
-
-const pages = [
-  { label: 'Accueil', value: 5600, pct: 45 },
-  { label: 'La Carte', value: 3480, pct: 28 },
-  { label: 'Réservation', value: 2240, pct: 18 },
-  { label: 'Notre histoire', value: 1120, pct: 9 }
-]
-
-const funnel = [
-  { label: 'Visite', value: 12458, pct: 100, shade: 'bg-[#B9B3A2]' },
-  { label: 'Carte', value: 7400, pct: 59, shade: 'bg-[#8D8672]' },
-  { label: 'Réservation', value: 3100, pct: 25, shade: 'bg-[#5A5548]' },
-  { label: 'Confirmée', value: 1840, pct: 15, shade: 'bg-[#1B2333]' }
-]
 
 const periods = [
   "Aujourd'hui",
@@ -69,7 +55,9 @@ function CustomTooltip ({ active, payload, label }) {
 export default function StatistiquesDashboard () {
   const [period, setPeriod] = useState('30 derniers jours')
   const [metric, setMetric] = useState('Visiteurs')
-  const [series, setSeries] = useState(seriesMap)
+  const [series, setSeries] = useState(emptySeries)
+  const [pages, setPages] = useState([])
+  const [funnel, setFunnel] = useState([])
 
   useEffect(() => {
     statistiquesApi
@@ -90,6 +78,8 @@ export default function StatistiquesDashboard () {
             { mois: 'Total', valeur: data.nombreUtilisateursInscrits || 0 }
           ]
         })
+        setPages(data.pagesPopulaires || [])
+        setFunnel(data.tunnelConversion || [])
       })
       .catch(error => {
         console.error('Erreur chargement statistiques détaillées', error)
@@ -213,26 +203,26 @@ export default function StatistiquesDashboard () {
             </h2>
             <div className='space-y-4'>
               {pages.map((p, i) => (
-                <div key={p.label} className='flex items-center gap-3'>
+                <div key={p.page} className='flex items-center gap-3'>
                   <span className='w-4 shrink-0 text-sm text-[#9C9686]'>
                     {i + 1}
                   </span>
                   <div className='flex-1'>
                     <div className='mb-1.5 flex items-baseline justify-between'>
-                      <span className='text-sm text-[#1B2333]'>{p.label}</span>
+                      <span className='text-sm text-[#1B2333]'>{p.page}</span>
                       <span className='text-sm font-semibold text-[#1B2333]'>
-                        {formatNumber(p.value)}
+                        {formatNumber(p.visites)}
                       </span>
                     </div>
                     <div className='h-1.5 w-full overflow-hidden rounded-full bg-[#F4EFDF]'>
                       <div
                         className='h-full rounded-full bg-[#C99A3B]'
-                        style={{ width: `${p.pct}%` }}
+                        style={{ width: `${p.pourcentage}%` }}
                       />
                     </div>
                   </div>
                   <span className='w-9 shrink-0 text-right text-sm text-[#9C9686]'>
-                    {p.pct}%
+                    {p.pourcentage}%
                   </span>
                 </div>
               ))}
@@ -245,18 +235,18 @@ export default function StatistiquesDashboard () {
               Tunnel de conversion
             </h2>
             <div className='space-y-4'>
-              {funnel.map(f => (
-                <div key={f.label}>
+              {funnel.map((f, index) => (
+                <div key={f.etape}>
                   <div className='mb-1.5 flex items-baseline justify-between'>
-                    <span className='text-sm text-[#1B2333]'>{f.label}</span>
+                    <span className='text-sm text-[#1B2333]'>{f.etape}</span>
                     <span className='text-sm text-[#9C9686]'>
-                      {formatNumber(f.value)} &middot; {f.pct}%
+                      {formatNumber(f.valeur)} &middot; {f.pourcentage}%
                     </span>
                   </div>
                   <div className='h-8 w-full overflow-hidden rounded-md bg-[#F4F1EA]'>
                     <div
                       className={`h-full rounded-md ${f.shade}`}
-                      style={{ width: `${f.pct}%` }}
+                      style={{ width: `${f.pourcentage}%` }}
                     />
                   </div>
                 </div>
@@ -264,19 +254,13 @@ export default function StatistiquesDashboard () {
             </div>
             <div className='mt-5 text-sm text-[#6B6459]'>
               Taux de conversion :{' '}
-              <span className='font-semibold text-[#C99A3B]'>14.8%</span>
+              <span className='font-semibold text-[#C99A3B]'>
+                {funnel.length > 0
+                  ? `${funnel[funnel.length - 1].pourcentage}%`
+                  : '0%'}
+              </span>
             </div>
           </div>
-        </div>
-
-        {/* Réservations & Avis */}
-        <div className='rounded-2xl border border-[#E7E1D2] bg-white p-6 shadow-sm'>
-          <h2 className='mb-2 text-base font-semibold text-[#1B2333]'>
-            Réservations &amp; Avis — évolution sur 12 mois
-          </h2>
-          <p className='text-sm text-[#9C9686]'>
-            (Section à compléter — même structure de graphique que ci-dessus)
-          </p>
         </div>
       </div>
     </div>

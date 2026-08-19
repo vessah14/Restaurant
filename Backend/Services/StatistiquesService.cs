@@ -47,8 +47,6 @@ namespace Backend.Services
             // Évolution des réservations
             var reservationsCeMois = await _context.Reservations
                 .CountAsync(r => r.DateReservation >= debutDuMois);
-            var reservationsConfirmeesCeMois = await _context.Reservations
-                .CountAsync(r => r.DateReservation >= debutDuMois && r.Statut == "confirmee");
             var reservationsMoisPrecedent = await _context.Reservations
                 .CountAsync(r => r.DateReservation >= debutMoisPrecedent && r.DateReservation <= finMoisPrecedent);
             var reservationsEvolution = reservationsMoisPrecedent > 0
@@ -83,17 +81,40 @@ namespace Backend.Services
                 ? Math.Round(((visiteursMois - visiteursMoisPrecedent) / (double)visiteursMoisPrecedent) * 100, 1)
                 : 0;
 
-            var pagesPopulaires = await _context.Visites
-                .Where(v => v.DateVisite >= debutMoisDateTime && v.Page != null && v.Page != "")
-                .GroupBy(v => v.Page!)
-                .Select(g => new PageStatistiquesDto
-                {
-                    Page = g.Key,
-                    Visites = g.Count()
-                })
-                .OrderByDescending(page => page.Visites)
+            var pagesVisitees = await _context.Visites
+                .Where(v => v.DateVisite >= debutMoisDateTime && v.DateVisite < aujourdHui.AddDays(1).Date)
+                .GroupBy(v => v.Page ?? "Non identifiée")
+                .Select(g => new { Page = g.Key, Visites = g.Count() })
+                .OrderByDescending(g => g.Visites)
                 .Take(5)
                 .ToListAsync();
+
+            var pagesPopulaires = pagesVisitees.Select(page => new PagePopulaireDto
+            {
+                Page = page.Page,
+                Visites = page.Visites,
+                Pourcentage = visiteursMois > 0
+                    ? Math.Round(page.Visites * 100.0 / visiteursMois, 1)
+                    : 0
+            }).ToList();
+
+            var visitesCarte = await _context.Visites
+                .CountAsync(v => v.DateVisite >= debutMoisDateTime
+                    && v.DateVisite < aujourdHui.AddDays(1).Date
+                    && v.Page != null
+                    && v.Page.ToLower().Contains("carte"));
+            var reservationsMois = await _context.Reservations
+                .CountAsync(r => r.DateCreation >= debutMoisDateTime);
+            var reservationsConfirmeesMois = await _context.Reservations
+                .CountAsync(r => r.DateCreation >= debutMoisDateTime && r.Statut == "confirmee");
+
+            var tunnelConversion = new List<EtapeConversionDto>
+            {
+                new() { Etape = "Visite", Valeur = visiteursMois, Pourcentage = 100 },
+                new() { Etape = "Carte", Valeur = visitesCarte, Pourcentage = visiteursMois > 0 ? Math.Round(visitesCarte * 100.0 / visiteursMois, 1) : 0 },
+                new() { Etape = "Réservation", Valeur = reservationsMois, Pourcentage = visiteursMois > 0 ? Math.Round(reservationsMois * 100.0 / visiteursMois, 1) : 0 },
+                new() { Etape = "Confirmée", Valeur = reservationsConfirmeesMois, Pourcentage = visiteursMois > 0 ? Math.Round(reservationsConfirmeesMois * 100.0 / visiteursMois, 1) : 0 }
+            };
 
             // Trafic journalier (7 derniers jours)
             var traficJournalier = new List<TraficJournalierDto>();
@@ -190,15 +211,16 @@ namespace Backend.Services
                 TraficJournalier = traficJournalier,
                 SourcesTrafic = sourcesTrafic,
                 HorairesPopulaires = horairesPopulaires,
-                PagesPopulaires = pagesPopulaires,
-                ReservationsMois = reservationsCeMois,
-                ReservationsConfirmeesMois = reservationsConfirmeesCeMois,
                 VisiteursMois = visiteursMois,
                 VisiteursEvolution = visiteursEvolution,
                 ReservationsEvolution = reservationsEvolution,
                 ClientsEvolution = clientsEvolution,
                 NoteEvolution = noteEvolution,
                 VisitesTotal = visitesTotal
+                ,
+                PagesPopulaires = pagesPopulaires
+                ,
+                TunnelConversion = tunnelConversion
             };
         }
     }

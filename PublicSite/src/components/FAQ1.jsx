@@ -69,7 +69,7 @@ export default function FAQ1 () {
                 }`}
               >
                 <div className='px-8 pb-8 text-sm text-gray-600 leading-8'>
-                  {faq.answer}
+                  {faq.reponse}
                 </div>
               </div>
             </div>
