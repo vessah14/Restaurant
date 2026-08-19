@@ -10,12 +10,13 @@ import {
   Search,
   BarChart3,
   Settings,
-  ArrowLeft,
+  LogOut,
   Menu,
   X,
   MessageSquare,
   Bell
 } from 'lucide-react'
+import { useAuthAdmin } from '../context/AuthAdminContext'
 
 const NAV_ITEMS = [
   { key: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
@@ -45,10 +46,14 @@ export default function AdminSidebar ({
   avisCount = 0
 }) {
   const [isOpen, setIsOpen] = useState(false)
+  const { deconnecter } = useAuthAdmin()
 
   const navItemsWithBadge = NAV_ITEMS.map(item => {
     if (item.key === 'notifications') {
-      return { ...item, badge: notificationCount > 0 ? notificationCount : null }
+      return {
+        ...item,
+        badge: notificationCount > 0 ? notificationCount : null
+      }
     }
     if (item.key === 'reservations') {
       return { ...item, badge: reservationCount > 0 ? reservationCount : null }
@@ -161,9 +166,12 @@ export default function AdminSidebar ({
               <p className='truncate text-xs text-slate-500'>{userEmail}</p>
             </div>
           </div>
-          <button className='flex w-full items-center justify-center gap-2 rounded-full border border-white/15 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition-colors'>
-            <ArrowLeft size={14} />
-            Retour au site public
+          <button
+            onClick={deconnecter}
+            className='flex w-full items-center justify-center gap-2 rounded-full border border-white/15 py-2 text-xs font-medium text-slate-300 hover:bg-white/5 transition-colors'
+          >
+            <LogOut size={14} />
+            Se déconnecter
           </button>
         </div>
       </aside>
