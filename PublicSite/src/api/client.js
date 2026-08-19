@@ -1,5 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5150";
 
+export function mediaUrl(path) {
+  if (!path || path.startsWith("http://") || path.startsWith("https://")) {
+    return path;
+  }
+
+  return `${API_URL}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("token");
 

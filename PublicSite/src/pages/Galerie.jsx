@@ -1,20 +1,10 @@
 import Navbarre2 from '../components/Navbarre2'
-import Entrees2 from '../assets/Entrees2.jpg'
-import Frommage1 from '../assets/frommage1.jpg'
-import Dessert3 from '../assets/Dessert3.jpg'
-import plat1 from '../assets/Entrees3.jpg'
-import Entrees4 from '../assets/Entrees4.jpg'
-import fond3 from '../assets/fond3.jfif'
-import fond5 from '../assets/fond5.jpg'
-import fond7 from '../assets/fond7.jpg'
-import Boisson1 from '../assets/boisson1.jpg'
-import paris1 from '../assets/paris1.jpg'
-import paris2 from '../assets/paris2.jpg'
-import paris3 from '../assets/paris3.jpg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Footer from '../components/Footer'
 import { useLanguage } from '../i18n/useLanguage'
 import Seo from '../components/Seo'
+import { galerieApi } from '../api/galerie'
+import { mediaUrl } from '../api/client'
 
 export default function Galerie () {
   return (
@@ -62,7 +52,10 @@ function HeaderTitle () {
 
 function Filter () {
   const [category, setCategory] = useState('tous')
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const { t } = useLanguage()
+  const { lang } = useLanguage()
 
   const categoryLabels = {
     tous: t.galeriePage.tous,
@@ -72,45 +65,34 @@ function Filter () {
     paris: t.galeriePage.paris
   }
 
-  const products = [
-    {
-      id: 1,
-      image: Entrees2,
-      text: 'Velouté de Châtaignes',
-      category: 'cuisine'
-    },
-    { id: 7, image: Frommage1, text: 'Frommages', category: 'cuisine' },
-    { id: 2, image: plat1, text: 'Filet de Bœuf Rossini', category: 'cuisine' },
-    {
-      id: 3,
-      image: Entrees4,
-      text: 'Salade de Homard Breton',
-      category: 'cuisine'
-    },
-    { id: 4, image: Dessert3, text: 'Paris-Brest Maison', category: 'cuisine' },
-    { id: 5, image: fond3, text: 'Salle1', category: 'salle' },
-    { id: 6, image: fond7, text: 'salle2', category: 'salle' },
-    { id: 8, image: fond5, text: 'salle3', category: 'salle' },
-    {
-      id: 9,
-      image: Boisson1,
-      text: 'Bordeaux Rouge Grand Cru',
-      category: 'cave'
-    },
-    { id: 10, image: paris1, text: 'paris1', category: 'paris' },
-    { id: 11, image: paris2, text: 'Paris2', category: 'paris' },
-    { id: 12, image: paris3, text: 'Paris3', category: 'paris' }
-  ]
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    galerieApi
+      .getAll(lang)
+      .then(data => {
+        if (active) setProducts(data)
+      })
+      .catch(() => {
+        if (active) setProducts([])
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [lang])
 
   const categories = [
     'tous',
-    ...new Set(products.map(product => product.category))
+    ...new Set(products.map(product => product.categorie))
   ]
 
   const filteredProducts =
     category === 'tous'
       ? products
-      : products.filter(product => product.category === category)
+      : products.filter(product => product.categorie === category)
 
   return (
     <section className='flex flex-col justify-center items-center mx-auto px-4 sm:px-6 py-10'>
@@ -136,26 +118,32 @@ function Filter () {
       </div>
 
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 md:gap-10 mt-10 sm:mt-16 w-full'>
-        {filteredProducts.map(product => (
-          <div
-            key={product.id}
-            className='relative group overflow-hidden rounded-2xl'
-          >
-            <img
-              src={product.image}
-              alt={product.text}
-              loading='lazy'
-              decoding='async'
-              className='w-full h-32 sm:h-44 md:h-55 rounded-2xl duration-700 ease-in-out hover:scale-105 object-cover object-center'
-            />
-            <div className='absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-0 group-hover:opacity-100 duration-700' />
-            <div className='absolute bottom-2 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 duration-700'>
-              <h1 className='text-white text-xs sm:text-sm font-bold'>
-                {product.text}
-              </h1>
+        {loading && (
+          <p className='col-span-full text-center text-gray-500'>
+            Chargement de la galerie...
+          </p>
+        )}
+        {!loading &&
+          filteredProducts.map(product => (
+            <div
+              key={product.id}
+              className='relative group overflow-hidden rounded-2xl'
+            >
+              <img
+                src={mediaUrl(product.imageUrl)}
+                alt={product.titre || product.categorie}
+                loading='lazy'
+                decoding='async'
+                className='w-full h-32 sm:h-44 md:h-55 rounded-2xl duration-700 ease-in-out hover:scale-105 object-cover object-center'
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-0 group-hover:opacity-100 duration-700' />
+              <div className='absolute bottom-2 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 duration-700'>
+                <h1 className='text-white text-xs sm:text-sm font-bold'>
+                  {product.titre || product.categorie}
+                </h1>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </section>
   )

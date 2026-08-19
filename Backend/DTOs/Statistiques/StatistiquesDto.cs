@@ -12,6 +12,9 @@ namespace Backend.Dtos.Statistiques
         public List<TraficJournalierDto> TraficJournalier { get; set; } = new();
         public List<SourceTraficDto> SourcesTrafic { get; set; } = new();
         public List<HorairePopulaireDto> HorairesPopulaires { get; set; } = new();
+        public List<PageStatistiquesDto> PagesPopulaires { get; set; } = new();
+        public int ReservationsMois { get; set; }
+        public int ReservationsConfirmeesMois { get; set; }
         public int VisiteursMois { get; set; }
         public double VisiteursEvolution { get; set; }
         public double ReservationsEvolution { get; set; }

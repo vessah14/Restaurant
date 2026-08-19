@@ -47,6 +47,8 @@ namespace Backend.Services
             // Évolution des réservations
             var reservationsCeMois = await _context.Reservations
                 .CountAsync(r => r.DateReservation >= debutDuMois);
+            var reservationsConfirmeesCeMois = await _context.Reservations
+                .CountAsync(r => r.DateReservation >= debutDuMois && r.Statut == "confirmee");
             var reservationsMoisPrecedent = await _context.Reservations
                 .CountAsync(r => r.DateReservation >= debutMoisPrecedent && r.DateReservation <= finMoisPrecedent);
             var reservationsEvolution = reservationsMoisPrecedent > 0
@@ -80,6 +82,18 @@ namespace Backend.Services
             var visiteursEvolution = visiteursMoisPrecedent > 0
                 ? Math.Round(((visiteursMois - visiteursMoisPrecedent) / (double)visiteursMoisPrecedent) * 100, 1)
                 : 0;
+
+            var pagesPopulaires = await _context.Visites
+                .Where(v => v.DateVisite >= debutMoisDateTime && v.Page != null && v.Page != "")
+                .GroupBy(v => v.Page!)
+                .Select(g => new PageStatistiquesDto
+                {
+                    Page = g.Key,
+                    Visites = g.Count()
+                })
+                .OrderByDescending(page => page.Visites)
+                .Take(5)
+                .ToListAsync();
 
             // Trafic journalier (7 derniers jours)
             var traficJournalier = new List<TraficJournalierDto>();
@@ -176,6 +190,9 @@ namespace Backend.Services
                 TraficJournalier = traficJournalier,
                 SourcesTrafic = sourcesTrafic,
                 HorairesPopulaires = horairesPopulaires,
+                PagesPopulaires = pagesPopulaires,
+                ReservationsMois = reservationsCeMois,
+                ReservationsConfirmeesMois = reservationsConfirmeesCeMois,
                 VisiteursMois = visiteursMois,
                 VisiteursEvolution = visiteursEvolution,
                 ReservationsEvolution = reservationsEvolution,
