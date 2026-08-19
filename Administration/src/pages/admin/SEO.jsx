@@ -2,14 +2,29 @@ import { useState, useEffect } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { pagesApi } from '../../api'
 
-const pages = [
-  { key: 'accueil', label: 'Accueil', path: '/accueil', score: 88 },
-  { key: 'menu', label: 'La Carte', path: '/menu', score: 76 },
-  { key: 'reservation', label: 'Réservation', path: '/reservation', score: 92 },
-  { key: 'histoire', label: 'Notre histoire', path: '/histoire', score: 65 },
-  { key: 'contact', label: 'Contact', path: '/contact', score: 81 },
-  { key: 'faq', label: 'FAQ', path: '/faq', score: 72 }
-]
+const pageLabels = {
+  accueil: { label: 'Accueil', path: '/' },
+  carte: { label: 'La Carte', path: '/Carte' },
+  reservation: { label: 'Réservation', path: '/Reserver' },
+  'notre-histoire': { label: 'Notre histoire', path: '/About' },
+  contact: { label: 'Contact', path: '/Contact' },
+  faq: { label: 'FAQ', path: '/FAQ' }
+}
+
+function getPageScore (page) {
+  const fields = [page.metaTitre, page.metaDescription, page.contenu]
+  return Math.round(
+    (fields.filter(value => value?.trim()).length * 100) / fields.length
+  )
+}
+
+function decoratePage (page) {
+  const details = pageLabels[page.slug] || {
+    label: page.slug,
+    path: `/${page.slug}`
+  }
+  return { ...page, ...details, key: page.slug, score: getPageScore(page) }
+}
 
 function scoreColor (score) {
   if (score >= 85) return '#4C8B5F'
@@ -24,12 +39,32 @@ function scoreLabel (score) {
 }
 
 export default function SEO () {
-  const [active, setActive] = useState('accueil')
+  const [pages, setPages] = useState([])
+  const [active, setActive] = useState(null)
   const [pageData, setPageData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const page = pages.find(p => p.key === active)
 
   useEffect(() => {
+    pagesApi
+      .getAll()
+      .then(data => {
+        const loadedPages = data.map(decoratePage)
+        setPages(loadedPages)
+        setActive(current =>
+          current && loadedPages.some(item => item.key === current)
+            ? current
+            : loadedPages[0]?.key || null
+        )
+      })
+      .catch(() => {
+        setError('Impossible de charger les pages depuis le backend.')
+      })
+  }, [])
+
+  useEffect(() => {
+    if (!active) return
     setLoading(true)
     setPageData(null)
     chargerPageData()
@@ -37,8 +72,11 @@ export default function SEO () {
 
   const chargerPageData = async () => {
     try {
-      const data = await pagesApi.getBySlug(active)
+      const data = await pagesApi.getBySlug(active, 'fr')
       setPageData(data)
+      setPages(current =>
+        current.map(item => (item.key === active ? decoratePage(data) : item))
+      )
     } catch (error) {
       console.error('Erreur lors du chargement des données de la page', error)
     } finally {
@@ -70,6 +108,10 @@ export default function SEO () {
     metaTitre: '',
     metaDescription: '',
     contenu: ''
+  }
+
+  if (error) {
+    return <div className='p-8 text-sm text-[#C0554A]'>{error}</div>
   }
 
   return (
@@ -132,69 +174,80 @@ export default function SEO () {
 
         {/* Right: detail panel */}
         <div className='rounded-2xl border border-[#EAE4D6] bg-white p-5 sm:p-6'>
-          <div className='mb-1.5 text-base font-bold text-[#1A1D24]'>
-            SEO — {page.label}
-          </div>
-          <div className='mb-5 flex flex-wrap items-center gap-2.5'>
-            <div className='h-1.5 max-w-40 flex-1 overflow-hidden rounded-full bg-[#EAE4D6]'>
-              <div
-                className='h-full'
-                style={{
-                  width: `${page.score}%`,
-                  background: scoreColor(page.score)
-                }}
+          {!page && (
+            <p className='text-sm text-[#8A8471]'>
+              Aucune page disponible dans le backend.
+            </p>
+          )}
+          {page && (
+            <>
+              <div className='mb-1.5 text-base font-bold text-[#1A1D24]'>
+                SEO — {page.label}
+              </div>
+              <div className='mb-5 flex flex-wrap items-center gap-2.5'>
+                <div className='h-1.5 max-w-40 flex-1 overflow-hidden rounded-full bg-[#EAE4D6]'>
+                  <div
+                    className='h-full'
+                    style={{
+                      width: `${page.score}%`,
+                      background: scoreColor(page.score)
+                    }}
+                  />
+                </div>
+                <span
+                  className='text-[13px] font-semibold'
+                  style={{ color: scoreColor(page.score) }}
+                >
+                  {page.score}/100 · {scoreLabel(page.score)}
+                </span>
+              </div>
+
+              <Field
+                label='TITRE SEO'
+                count={`(${d.metaTitre?.length || 0}/65)`}
+                error={(d.metaTitre?.length || 0) > 65}
+                value={d.metaTitre || ''}
+                onChange={e => handleChange('metaTitre', e.target.value)}
               />
-            </div>
-            <span
-              className='text-[13px] font-semibold'
-              style={{ color: scoreColor(page.score) }}
-            >
-              {page.score}/100 · {scoreLabel(page.score)}
-            </span>
-          </div>
 
-          <Field
-            label='TITRE SEO'
-            count={`(${d.metaTitre?.length || 0}/65)`}
-            error={(d.metaTitre?.length || 0) > 65}
-            value={d.metaTitre || ''}
-            onChange={e => handleChange('metaTitre', e.target.value)}
-          />
+              <Field
+                label='MÉTA-DESCRIPTION'
+                count={`(${d.metaDescription?.length || 0}/160)`}
+                value={d.metaDescription || ''}
+                textarea
+                onChange={e => handleChange('metaDescription', e.target.value)}
+              />
 
-          <Field
-            label='MÉTA-DESCRIPTION'
-            count={`(${d.metaDescription?.length || 0}/160)`}
-            value={d.metaDescription || ''}
-            textarea
-            onChange={e => handleChange('metaDescription', e.target.value)}
-          />
+              <Field
+                label='CONTENU'
+                value={d.contenu || ''}
+                textarea
+                onChange={e => handleChange('contenu', e.target.value)}
+              />
 
-          <Field
-            label='CONTENU'
-            value={d.contenu || ''}
-            textarea
-            onChange={e => handleChange('contenu', e.target.value)}
-          />
+              <div className='mb-5 rounded-lg border border-[#EAE4D6] bg-[#F7F4EC] px-4 py-3.5 overflow-hidden'>
+                <div className='mb-1.5 text-xs text-[#8A8471]'>
+                  Aperçu Google
+                </div>
+                <div className='text-[15px] font-medium text-[#1A0DAB] truncate'>
+                  {d.metaTitre || 'Titre de la page'}
+                </div>
+                <div className='my-0.5 text-xs text-[#4C8B5F] truncate'>
+                  lesdeuxcolombes.fr/{active}
+                </div>
+                <div className='text-[13px] text-[#5C5847] line-clamp-2 sm:line-clamp-none'>
+                  {d.metaDescription || 'Description de la page'}
+                </div>
+              </div>
 
-          <div className='mb-5 rounded-lg border border-[#EAE4D6] bg-[#F7F4EC] px-4 py-3.5 overflow-hidden'>
-            <div className='mb-1.5 text-xs text-[#8A8471]'>Aperçu Google</div>
-            <div className='text-[15px] font-medium text-[#1A0DAB] truncate'>
-              {d.metaTitre || 'Titre de la page'}
-            </div>
-            <div className='my-0.5 text-xs text-[#4C8B5F] truncate'>
-              lesdeuxcolombes.fr/{active}
-            </div>
-            <div className='text-[13px] text-[#5C5847] line-clamp-2 sm:line-clamp-none'>
-              {d.metaDescription || 'Description de la page'}
-            </div>
-          </div>
-
-          <button
-            onClick={sauvegarderPage}
-            className='w-full rounded-lg bg-[#0B1F3A] py-3.5 text-sm font-bold text-white hover:bg-[#132a4d] transition-colors'
-          >
-            Enregistrer les modifications
-          </button>
+              <button
+                onClick={sauvegarderPage}
+                className='w-full rounded-lg bg-[#0B1F3A] py-3.5 text-sm font-bold text-white hover:bg-[#132a4d] transition-colors'
+              >
+                Enregistrer les modifications
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

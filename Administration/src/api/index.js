@@ -144,10 +144,10 @@ export const uploadsApi = {
 
 export const pagesApi = {
   // Récupérer une page par slug
-  getBySlug: (slug) => api.get(`/api/Pages/${slug}`),
+  getBySlug: (slug, langue = 'fr') => api.get(`/api/Pages/${slug}?langue=${langue}`),
 
   // Récupérer toutes les pages
-  getAll: () => api.get("/api/Pages"),
+  getAll: (langue = 'fr') => api.get(`/api/Pages?langue=${langue}`),
 
   // Modifier une page
   modifier: (id, donnees) => api.put(`/api/Pages/${id}`, donnees),
