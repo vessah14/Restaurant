@@ -1,0 +1,15 @@
+# Robots.txt pour Les Deux Colombes - Restaurant
+
+# Allow all crawlers by default
+User-agent: *
+Allow: /
+
+# Disallow sensitive pages
+Disallow: /Connexion
+Disallow: /Inscription
+
+# Sitemap location
+Sitemap: http://localhost:5174/sitemap.xml
+
+# Crawl delay (optional - adjust as needed)
+Crawl-delay: 1

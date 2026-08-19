@@ -1,0 +1,71 @@
+# Configuration pour Apache (optionnel, dépend de l'hébergement)
+# Ajouter dans .htaccess ou configure Vite pour les redirections
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Rediriger vers HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+  # Rediriger www vers non-www
+  RewriteCond %{HTTP_HOST} ^www\.lesdeuxcolombes\.fr [NC]
+  RewriteRule ^(.*)$ https://lesdeuxcolombes.fr/$1 [L,R=301]
+  
+  # Supprimer les barres obliques de fin (except les répertoires)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [L,R=301]
+  
+  # Ajouter des barres obliques aux répertoires
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteRule ^ %{REQUEST_URI}/ [L]
+</IfModule>
+
+# Caching pour les ressources statiques
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  
+  # CSS et JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  
+  # Fonts
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Compression GZIP
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+</IfModule>
+
+# Headers de sécurité SEO
+<IfModule mod_headers.c>
+  # Empêcher le clickjacking
+  Header always append X-Frame-Options "SAMEORIGIN"
+  
+  # Empêcher le MIME type sniffing
+  Header always append X-Content-Type-Options "nosniff"
+  
+  # Politique de sécurité du contenu (CSP)
+  Header always append X-XSS-Protection "1; mode=block"
+  
+  # Referrer Policy
+  Header always append Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
