@@ -10,5 +10,6 @@ namespace Backend.Dtos.Menu
         public string? ImageUrl { get; set; }
         public bool Disponible { get; set; }
         public int OrdreAffichage { get; set; }
+        public DateTime DateCreation { get; set; }
     }
 }

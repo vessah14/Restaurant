@@ -99,7 +99,8 @@ namespace Backend.Services
                 Prix = plat.Prix,
                 ImageUrl = plat.ImageUrl,
                 Disponible = plat.Disponible,
-                OrdreAffichage = plat.OrdreAffichage
+                OrdreAffichage = plat.OrdreAffichage,
+                DateCreation = plat.DateCreation
             };
         }
 
@@ -141,7 +142,8 @@ namespace Backend.Services
                 Prix = plat.Prix,
                 ImageUrl = plat.ImageUrl,
                 Disponible = plat.Disponible,
-                OrdreAffichage = plat.OrdreAffichage
+                OrdreAffichage = plat.OrdreAffichage,
+                DateCreation = plat.DateCreation
             };
         }
 
@@ -168,7 +170,8 @@ namespace Backend.Services
                 Prix = p.Prix,
                 ImageUrl = p.ImageUrl,
                 Disponible = p.Disponible,
-                OrdreAffichage = p.OrdreAffichage
+                OrdreAffichage = p.OrdreAffichage,
+                DateCreation = p.DateCreation
             };
         }
     }

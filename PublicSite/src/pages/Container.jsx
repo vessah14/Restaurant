@@ -25,6 +25,9 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage'
 import Seo from '../components/Seo'
+import { carteApi } from '../api/carte'
+import { mediaUrl } from '../api/client'
+import { useEffect, useState } from 'react'
 
 export default function Container () {
   return (
@@ -229,26 +232,7 @@ function Body () {
           viewport={{ once: true }}
         >
           <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10'>
-            <Carte
-              image={carte1}
-              price={10}
-              name='Saumon rôti, crème aux champignons, épinards fondants'
-              description='Pavé de saumon poêlé, sauce crème aux champignons, épinards fondants et herbes.'
-            />
-
-            <Carte
-              image={carte2}
-              price={15}
-              name='Moelleux chocolat-caramel, glace vanille'
-              description='Brownie chocolat et mousse caramel, coulis chocolat, éclats de cacahuètes, glace vanille.'
-            />
-
-            <Carte
-              image={carte3}
-              price={5}
-              name='Cuisse de poulet grillée BBQ, frites maison'
-              description='Cuisse de poulet grillée, laquée BBQ, frites maison.'
-            />
+            <PlatsRecents />
           </div>
 
           <div className='flex justify-center mt-10'>
@@ -514,6 +498,37 @@ function Body () {
       </section>
     </>
   )
+}
+
+function PlatsRecents () {
+  const [plats, setPlats] = useState([])
+
+  useEffect(() => {
+    carteApi
+      .getCarte('fr')
+      .then(categories => {
+        const platsRecents = categories
+          .flatMap(categorie => categorie.plats || [])
+          .filter(plat => plat.disponible)
+          .sort((a, b) => new Date(b.dateCreation) - new Date(a.dateCreation))
+          .slice(0, 3)
+
+        setPlats(platsRecents)
+      })
+      .catch(error => {
+        console.error('Erreur lors du chargement des plats récents', error)
+      })
+  }, [])
+
+  return plats.map(plat => (
+    <Carte
+      key={plat.id}
+      image={mediaUrl(plat.imageUrl)}
+      price={plat.prix}
+      name={plat.nom}
+      description={plat.description}
+    />
+  ))
 }
 
 function Stars () {

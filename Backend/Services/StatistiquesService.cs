@@ -44,6 +44,14 @@ namespace Backend.Services
                 ? Math.Round(avisPublies.Average(a => a.Note), 1)
                 : 0;
 
+            var repartitionNotes = Enumerable.Range(1, 5)
+                .Select(note => new RepartitionNoteDto
+                {
+                    Note = note,
+                    Nombre = avisPublies.Count(avis => avis.Note == note)
+                })
+                .ToList();
+
             // Évolution des réservations
             var reservationsCeMois = await _context.Reservations
                 .CountAsync(r => r.DateReservation >= debutDuMois);
@@ -207,6 +215,7 @@ namespace Backend.Services
                 NombreAvis = nombreAvis,
                 NombreAvisEnAttente = nombreAvisEnAttente,
                 NoteMoyenne = noteMoyenne,
+                RepartitionNotes = repartitionNotes,
                 EvolutionReservations = evolution,
                 TraficJournalier = traficJournalier,
                 SourcesTrafic = sourcesTrafic,

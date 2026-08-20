@@ -8,6 +8,7 @@ namespace Backend.Dtos.Statistiques
         public int NombreAvis { get; set; }
         public int NombreAvisEnAttente { get; set; }
         public double NoteMoyenne { get; set; }
+        public List<RepartitionNoteDto> RepartitionNotes { get; set; } = new();
         public List<EvolutionReservationsDto> EvolutionReservations { get; set; } = new();
         public List<TraficJournalierDto> TraficJournalier { get; set; } = new();
         public List<SourceTraficDto> SourcesTrafic { get; set; } = new();

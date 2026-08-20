@@ -39,6 +39,7 @@ export default function Dashboard () {
     clientsEvolution: 0,
     noteMoyenne: 0,
     noteEvolution: 0,
+    repartitionNotes: [],
     avisAValider: 0,
     resaEnAttente: 0
   })
@@ -95,6 +96,7 @@ export default function Dashboard () {
         clientsEvolution: statsData.clientsEvolution ?? prev.clientsEvolution,
         noteMoyenne: statsData.noteMoyenne ?? prev.noteMoyenne,
         noteEvolution: statsData.noteEvolution ?? prev.noteEvolution,
+        repartitionNotes: statsData.repartitionNotes ?? prev.repartitionNotes,
         avisAValider: statsData.nombreAvisEnAttente ?? prev.avisAValider,
         resaEnAttente:
           statsData.nombreReservationsEnAttente ?? prev.resaEnAttente
@@ -231,6 +233,52 @@ export default function Dashboard () {
               label='Rés. en attente'
               tag='Ce soir'
             />
+          </div>
+
+          <div className='bg-white rounded-2xl shadow-sm p-6 mb-6'>
+            <div className='flex flex-wrap items-center justify-between gap-2 mb-5'>
+              <div>
+                <h2 className="font-['Playfair_Display'] text-lg font-semibold text-gray-800">
+                  Répartition des notes
+                </h2>
+                <p className='text-sm text-gray-500'>Avis publiés</p>
+              </div>
+              <span className='text-sm font-semibold text-gray-700'>
+                {stats.noteMoyenne} / 5 en moyenne
+              </span>
+            </div>
+            <div className='space-y-3'>
+              {[...(stats.repartitionNotes || [])].reverse().map(item => {
+                const totalAvis = (stats.repartitionNotes || []).reduce(
+                  (total, note) => total + note.nombre,
+                  0
+                )
+                const pourcentage =
+                  totalAvis > 0
+                    ? Math.round((item.nombre * 100) / totalAvis)
+                    : 0
+
+                return (
+                  <div
+                    key={item.note}
+                    className='flex items-center gap-3 text-sm'
+                  >
+                    <span className='w-12 shrink-0 text-gray-600'>
+                      {item.note} ★
+                    </span>
+                    <div className='h-2 flex-1 overflow-hidden rounded-full bg-gray-100'>
+                      <div
+                        className='h-full rounded-full bg-[#D9A15C]'
+                        style={{ width: `${pourcentage}%` }}
+                      />
+                    </div>
+                    <span className='w-16 shrink-0 text-right font-semibold text-gray-700'>
+                      {item.nombre} ({pourcentage}%)
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           {/*===================================
