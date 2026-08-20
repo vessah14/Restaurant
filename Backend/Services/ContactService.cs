@@ -10,11 +10,16 @@ namespace Backend.Services
     {
         private readonly RestaurantDbContext _context;
         private readonly INotificationService _notificationService;
+        private readonly IEmailService _emailService;
 
-        public ContactService(RestaurantDbContext context, INotificationService notificationService)
+        public ContactService(
+            RestaurantDbContext context,
+            INotificationService notificationService,
+            IEmailService emailService)
         {
             _context = context;
             _notificationService = notificationService;
+            _emailService = emailService;
         }
 
         public async Task<ContactMessageDto> CreerAsync(CreerContactMessageDto dto)
@@ -104,6 +109,12 @@ namespace Backend.Services
             message.Reponse = dto.Reponse;
             message.DateReponse = DateTime.UtcNow;
             await _context.SaveChangesAsync();
+
+            await _emailService.EnvoyerEmailReponseContactAsync(
+                message.Email,
+                message.Nom,
+                message.Sujet,
+                message.Reponse);
 
             return MapVersDto(message);
         }

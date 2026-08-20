@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
 import { avisApi } from '../api/avis'
 
-function Stars () {
+function Stars ({ note = 0 }) {
   return (
     <div className='flex gap-0.5 text-amber-400 text-sm mb-4'>
       {Array.from({ length: 5 }).map((_, i) => (
@@ -108,9 +108,9 @@ export default function Commentaire () {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className='flex items-center justify-center gap-4 max-w-6xl mx-auto'>
-        {renderCard(testimonials[prevIndex], 'side')}
+        {total > 1 && renderCard(testimonials[prevIndex], 'side')}
         {renderCard(testimonials[index], 'active')}
-        {renderCard(testimonials[nextIndex], 'side')}
+        {total > 2 && renderCard(testimonials[nextIndex], 'side')}
       </div>
 
       <div className='flex items-center justify-center gap-4 mt-8'>

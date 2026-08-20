@@ -2,6 +2,7 @@ import Footer from '../components/Footer'
 import Navbarre2 from '../components/Navbarre2'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { useLanguage } from '../i18n/useLanguage'
 import { validateInscription, hasErrors } from '../utils/validation'
 import { useAuth } from '../context/AuthContext'
@@ -61,6 +62,8 @@ function Forms () {
   })
   const [errors, setErrors] = useState({})
   const [chargement, setChargement] = useState(false)
+  const [afficherMotDePasse, setAfficherMotDePasse] = useState(false)
+  const [afficherConfirmation, setAfficherConfirmation] = useState(false)
 
   const handleChange = field => e => {
     const value = field === 'accepte' ? e.target.checked : e.target.value
@@ -119,7 +122,6 @@ function Forms () {
     <>
       <div className='flex justify-center items-center py-24 px-6'>
         <div className='bg-white shadow-2xl rounded-3xl p-10 w-full max-w-xl'>
-
           {/* Formulaire */}
           <form onSubmit={handleSubmit} noValidate className='space-y-6'>
             {/* Nom et prénom */}
@@ -188,13 +190,31 @@ function Forms () {
               <label className='font-semibold text-[#C4A060] mb-2'>
                 {t.inscription.motDePasse}
               </label>
-              <input
-                type='password'
-                placeholder='********'
-                value={form.motDePasse}
-                onChange={handleChange('motDePasse')}
-                className={inputClass('motDePasse')}
-              />
+              <div className='relative'>
+                <input
+                  type={afficherMotDePasse ? 'text' : 'password'}
+                  placeholder='********'
+                  value={form.motDePasse}
+                  onChange={handleChange('motDePasse')}
+                  className={`${inputClass('motDePasse')} w-full pr-11`}
+                />
+                <button
+                  type='button'
+                  onClick={() => setAfficherMotDePasse(prev => !prev)}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#C4A060]'
+                  aria-label={
+                    afficherMotDePasse
+                      ? 'Masquer le mot de passe'
+                      : 'Afficher le mot de passe'
+                  }
+                >
+                  {afficherMotDePasse ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
               {errorMsg('motDePasse')}
             </div>
 
@@ -203,13 +223,31 @@ function Forms () {
               <label className='font-semibold text-[#C4A060] mb-2'>
                 {t.inscription.confirmation}
               </label>
-              <input
-                type='password'
-                placeholder='********'
-                value={form.confirmation}
-                onChange={handleChange('confirmation')}
-                className={inputClass('confirmation')}
-              />
+              <div className='relative'>
+                <input
+                  type={afficherConfirmation ? 'text' : 'password'}
+                  placeholder='********'
+                  value={form.confirmation}
+                  onChange={handleChange('confirmation')}
+                  className={`${inputClass('confirmation')} w-full pr-11`}
+                />
+                <button
+                  type='button'
+                  onClick={() => setAfficherConfirmation(prev => !prev)}
+                  className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#C4A060]'
+                  aria-label={
+                    afficherConfirmation
+                      ? 'Masquer la confirmation'
+                      : 'Afficher la confirmation'
+                  }
+                >
+                  {afficherConfirmation ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
               {errorMsg('confirmation')}
             </div>
 

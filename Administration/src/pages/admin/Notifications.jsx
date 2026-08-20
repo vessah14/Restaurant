@@ -49,7 +49,7 @@ function formatDate (dateStr) {
   }).format(date)
 }
 
-export default function Notifications () {
+export default function Notifications ({ onNotificationCountChange }) {
   const [notifications, setNotifications] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('toutes')
@@ -73,12 +73,17 @@ export default function Notifications () {
     }
   }
 
-  const handleMarquerLu = async (id) => {
+  const handleMarquerLu = async id => {
     try {
       await notificationsApi.marquerLu(id)
       setNotifications(prev =>
-        prev.map(n => n.id === id ? { ...n, estLu: true, dateLecture: new Date().toISOString() } : n)
+        prev.map(n =>
+          n.id === id
+            ? { ...n, estLu: true, dateLecture: new Date().toISOString() }
+            : n
+        )
       )
+      onNotificationCountChange?.(-1)
     } catch (err) {
       console.error('Erreur marquage lu:', err)
     }
@@ -88,15 +93,21 @@ export default function Notifications () {
     try {
       await notificationsApi.marquerTousLus()
       setNotifications(prev =>
-        prev.map(n => ({ ...n, estLu: true, dateLecture: new Date().toISOString() }))
+        prev.map(n => ({
+          ...n,
+          estLu: true,
+          dateLecture: new Date().toISOString()
+        }))
       )
+      onNotificationCountChange?.('reset')
     } catch (err) {
       console.error('Erreur marquage tous lus:', err)
     }
   }
 
-  const handleSupprimer = async (id) => {
-    if (!window.confirm('Voulez-vous vraiment supprimer cette notification ?')) return
+  const handleSupprimer = async id => {
+    if (!window.confirm('Voulez-vous vraiment supprimer cette notification ?'))
+      return
     try {
       await notificationsApi.supprimer(id)
       setNotifications(prev => prev.filter(n => n.id !== id))
@@ -196,11 +207,15 @@ export default function Notifications () {
               <div
                 key={notification.id}
                 className={`bg-white rounded-2xl shadow-sm p-5 flex items-start gap-4 transition-all ${
-                  !notification.estLu ? 'border-l-4 border-[#C4A060]' : 'opacity-75'
+                  !notification.estLu
+                    ? 'border-l-4 border-[#C4A060]'
+                    : 'opacity-75'
                 }`}
               >
                 {/* Icône du type */}
-                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${config.color}`}>
+                <div
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${config.color}`}
+                >
                   <Icon size={20} className={config.iconColor} />
                 </div>
 
@@ -212,7 +227,9 @@ export default function Notifications () {
                         <h3 className='font-semibold text-gray-800'>
                           {notification.titre}
                         </h3>
-                        <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${config.color}`}>
+                        <span
+                          className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${config.color}`}
+                        >
                           {config.label}
                         </span>
                         {!notification.estLu && (

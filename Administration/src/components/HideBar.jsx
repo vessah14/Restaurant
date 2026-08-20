@@ -19,7 +19,7 @@ function formatNotificationDate (dateStr) {
   const diffHours = Math.floor(diffMs / 3600000)
   const diffDays = Math.floor(diffMs / 86400000)
 
-  if (diffMins < 1) return 'À l\'instant'
+  if (diffMins < 1) return "À l'instant"
   if (diffMins < 60) return `Il y a ${diffMins} min`
   if (diffHours < 24) return `Il y a ${diffHours} h`
   if (diffDays < 7) return `Il y a ${diffDays} j`
@@ -33,7 +33,8 @@ export default function HideBar ({
   notificationCount = 0,
   userInitials = 'AD',
   date = new Date(),
-  onVoirToutes = null
+  onVoirToutes = null,
+  onNotificationCountChange = null
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [notifications, setNotifications] = useState([])
@@ -63,13 +64,18 @@ export default function HideBar ({
     setIsOpen(!isOpen)
   }
 
-  const handleMarquerLu = async (id) => {
+  const handleMarquerLu = async id => {
     try {
       await notificationsApi.marquerLu(id)
       setNotifications(prev =>
-        prev.map(n => n.id === id ? { ...n, estLu: true, dateLecture: new Date().toISOString() } : n)
+        prev.map(n =>
+          n.id === id
+            ? { ...n, estLu: true, dateLecture: new Date().toISOString() }
+            : n
+        )
       )
       setCount(prev => Math.max(0, prev - 1))
+      onNotificationCountChange?.(-1)
     } catch (error) {
       console.error('Erreur marquage lu:', error)
     }
@@ -79,9 +85,14 @@ export default function HideBar ({
     try {
       await notificationsApi.marquerTousLus()
       setNotifications(prev =>
-        prev.map(n => ({ ...n, estLu: true, dateLecture: new Date().toISOString() }))
+        prev.map(n => ({
+          ...n,
+          estLu: true,
+          dateLecture: new Date().toISOString()
+        }))
       )
       setCount(0)
+      onNotificationCountChange?.('reset')
     } catch (error) {
       console.error('Erreur marquage tous lus:', error)
     }
@@ -131,7 +142,9 @@ export default function HideBar ({
               <div className='absolute right-0 top-full mt-2 z-20 w-96 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden'>
                 {/* Header du dropdown */}
                 <div className='flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50'>
-                  <h3 className='font-semibold text-slate-900'>Notifications</h3>
+                  <h3 className='font-semibold text-slate-900'>
+                    Notifications
+                  </h3>
                   {count > 0 && (
                     <button
                       onClick={handleMarquerTousLus}
@@ -175,7 +188,9 @@ export default function HideBar ({
                             </p>
                             <div className='flex items-center gap-1 mt-1 text-xs text-slate-400'>
                               <Clock size={10} />
-                              {formatNotificationDate(notification.dateCreation)}
+                              {formatNotificationDate(
+                                notification.dateCreation
+                              )}
                             </div>
                           </div>
                           {!notification.estLu && (

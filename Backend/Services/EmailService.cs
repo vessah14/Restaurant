@@ -34,5 +34,28 @@ namespace Backend.Services
 
             await client.SendMailAsync(message);
         }
+
+        public async Task EnvoyerEmailReponseContactAsync(string emailDestinataire, string nomDestinataire, string sujet, string reponse)
+        {
+            var message = new MailMessage
+            {
+                From = new MailAddress(_config["Smtp:From"]!, "Les Deux Colombes"),
+                Subject = $"Réponse à votre message : {sujet}",
+                Body = $"Bonjour {nomDestinataire},\n\n" +
+                       $"Voici la réponse de notre équipe à votre message concernant « {sujet} » :\n\n" +
+                       reponse + "\n\n" +
+                       "Cordialement,\nLes Deux Colombes",
+                IsBodyHtml = false
+            };
+            message.To.Add(emailDestinataire);
+
+            using var client = new SmtpClient(_config["Smtp:Host"], int.Parse(_config["Smtp:Port"]!))
+            {
+                Credentials = new NetworkCredential(_config["Smtp:User"], _config["Smtp:Password"]),
+                EnableSsl = true
+            };
+
+            await client.SendMailAsync(message);
+        }
     }
 }

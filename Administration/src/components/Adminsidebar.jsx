@@ -8,7 +8,6 @@ import {
   Star,
   HelpCircle,
   Search,
-  BarChart3,
   Settings,
   LogOut,
   Menu,
@@ -27,7 +26,6 @@ const NAV_ITEMS = [
   { key: 'avis', label: 'Clients Avis ', icon: Star },
   { key: 'faq', label: 'FAQ', icon: HelpCircle },
   { key: 'seo', label: 'SEO & Visibilité', icon: Search },
-  { key: 'stats', label: 'Statistiques', icon: BarChart3 },
   { key: 'messages', label: 'Messages', icon: MessageSquare },
   { key: 'notifications', label: 'Notifications', icon: Bell },
   { key: 'parametres', label: 'Paramètres', icon: Settings }

@@ -3,14 +3,6 @@ import Commentaire from '../components/Commentaite'
 import Footer from '../components/Footer'
 import image4 from '../assets/fond1.jfif'
 import card1 from '../assets/card1.jpg'
-import carte1 from '../assets/carte1.jfif'
-import carte2 from '../assets/carte2.jfif'
-import carte3 from '../assets/carte3.jfif'
-import carte4 from '../assets/carte4.jfif'
-import carte5 from '../assets/carte5.jfif'
-import carte6 from '../assets/carte6.jfif'
-import carte7 from '../assets/carte7.jfif'
-import carte8 from '../assets/carte8.jfif'
 import fond2 from '../assets/fond2.jfif'
 import fond3 from '../assets/fond3.jpg'
 import fond5 from '../assets/fond5.jpg'
@@ -26,6 +18,7 @@ import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage'
 import Seo from '../components/Seo'
 import { carteApi } from '../api/carte'
+import { galerieApi } from '../api/galerie'
 import { mediaUrl } from '../api/client'
 import { useEffect, useState } from 'react'
 
@@ -334,17 +327,7 @@ function Body () {
           viewport={{ once: true }}
           className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10 max-w-7xl w-full'
         >
-          {[carte4, carte1, carte2, carte3, carte5, carte6, carte7, carte8].map(
-            (image, index) => (
-              <div key={index} className='overflow-hidden rounded-2xl'>
-                <img
-                  src={image}
-                  alt='Galerie'
-                  className='w-full h-72 object-cover rounded-2xl duration-700 hover:scale-105'
-                />
-              </div>
-            )
-          )}
+          <GalerieRecente />
         </motion.div>
 
         <Link
@@ -528,6 +511,42 @@ function PlatsRecents () {
       name={plat.nom}
       description={plat.description}
     />
+  ))
+}
+
+function GalerieRecente () {
+  const { lang } = useLanguage()
+  const [images, setImages] = useState([])
+
+  useEffect(() => {
+    let active = true
+
+    galerieApi
+      .getAll(lang)
+      .then(data => {
+        if (active) {
+          setImages(data.filter(image => image.imageUrl).slice(0, 8))
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors du chargement de la galerie', error)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [lang])
+
+  return images.map(image => (
+    <div key={image.id} className='overflow-hidden rounded-2xl'>
+      <img
+        src={mediaUrl(image.imageUrl)}
+        alt={image.titre || image.categorie || 'Galerie'}
+        loading='lazy'
+        decoding='async'
+        className='w-full h-72 object-cover rounded-2xl duration-700 hover:scale-105'
+      />
+    </div>
   ))
 }
 

@@ -20,6 +20,8 @@ export default function Menu () {
   const [allItems, setAllItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
+  const [editingId, setEditingId] = useState(null)
+  const [updatingId, setUpdatingId] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
   const [formData, setFormData] = useState({
@@ -47,6 +49,7 @@ export default function Menu () {
 
   const toggleDisponible = async (id, currentStatus) => {
     try {
+      setUpdatingId(id)
       const plat = allItems.find(p => p.id === id)
       if (!plat) return
 
@@ -63,6 +66,8 @@ export default function Menu () {
       await chargerPlats()
     } catch (error) {
       console.error('Erreur lors de la modification du plat', error)
+    } finally {
+      setUpdatingId(null)
     }
   }
 
@@ -104,18 +109,29 @@ export default function Menu () {
           ? 3
           : 4
 
-      await platsApi.creer({
-        categorieId: categorieId,
+      const donnees = {
         prix: parseFloat(formData.prix) || 0,
         imageUrl: formData.imageUrl || null,
-        ordreAffichage: allItems.length + 1,
+        ordreAffichage: editingId
+          ? allItems.find(item => item.id === editingId)?.ordreAffichage || 0
+          : allItems.length + 1,
         nomFr: formData.nom,
         descriptionFr: formData.description,
         nomEn: formData.nom,
-        descriptionEn: formData.description
-      })
+        descriptionEn: formData.description,
+        disponible: editingId
+          ? allItems.find(item => item.id === editingId)?.disponible ?? true
+          : true
+      }
+
+      if (editingId) {
+        await platsApi.modifier(editingId, donnees)
+      } else {
+        await platsApi.creer({ categorieId, ...donnees })
+      }
       await chargerPlats()
       setShowModal(false)
+      setEditingId(null)
       setFormData({
         nom: '',
         description: '',
@@ -124,17 +140,40 @@ export default function Menu () {
         categorie: 'plats'
       })
     } catch (error) {
-      console.error('Erreur lors de la création du plat', error)
-      setUploadError(error?.message || "Impossible d'ajouter le plat.")
+      console.error('Erreur lors de l’enregistrement du plat', error)
+      setUploadError(
+        error?.message ||
+          (editingId
+            ? 'Impossible de modifier le plat.'
+            : "Impossible d'ajouter le plat.")
+      )
     }
   }
 
   const openModal = () => {
+    setEditingId(null)
+    setShowModal(true)
+  }
+
+  const openEditModal = id => {
+    const plat = allItems.find(item => item.id === id)
+    if (!plat) return
+
+    setEditingId(id)
+    setFormData({
+      nom: plat.nom || '',
+      description: plat.description || '',
+      prix: plat.prix ?? '',
+      imageUrl: plat.imageUrl || '',
+      categorie: plat.categorieCode || 'plats'
+    })
+    setUploadError(null)
     setShowModal(true)
   }
 
   const closeModal = () => {
     setShowModal(false)
+    setEditingId(null)
     setUploadError(null)
     setFormData({
       nom: '',
@@ -204,12 +243,12 @@ export default function Menu () {
         ))}
       </div>
 
-      {/* Grid */}
-      <div className='grid grid-cols-1 xs:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 sm:gap-5'>
+      {/* Cartes flexibles */}
+      <div className='flex flex-wrap gap-4 sm:gap-5'>
         {formattedItems.map(item => (
           <div
             key={item.id}
-            className={`overflow-hidden rounded-2xl border border-[#EAE4D6] bg-white ${
+            className={`w-full sm:w-[calc(50%-0.625rem)] xl:w-[calc(33.333%-0.835rem)] overflow-hidden rounded-2xl border border-[#EAE4D6] bg-white ${
               item.active ? '' : 'opacity-75'
             }`}
           >
@@ -255,18 +294,27 @@ export default function Menu () {
               </div>
 
               <div className='flex gap-2'>
-                <button className='flex-1 rounded-lg border border-[#E2DCCB] bg-white py-2.5 text-[13px] font-semibold text-[#1A1D24] hover:bg-[#F7F4EC] transition-colors'>
+                <button
+                  onClick={() => openEditModal(item.id)}
+                  className='flex-1 rounded-lg border border-[#E2DCCB] bg-white py-2.5 text-[13px] font-semibold text-[#1A1D24] hover:bg-[#F7F4EC] transition-colors'
+                >
                   Modifier
                 </button>
                 <button
+                  type='button'
                   onClick={() => toggleDisponible(item.id, item.active)}
+                  disabled={updatingId === item.id}
                   className={`whitespace-nowrap rounded-lg border bg-white px-4 py-2.5 text-[13px] font-semibold transition-colors ${
                     item.active
                       ? 'border-[#C0554A] text-[#C0554A] hover:bg-[#FCEDEB]'
                       : 'border-[#4C8B5F] text-[#4C8B5F] hover:bg-[#EAF5EC]'
-                  }`}
+                  } disabled:cursor-wait disabled:opacity-60`}
                 >
-                  {item.active ? 'Désact.' : 'Activer'}
+                  {updatingId === item.id
+                    ? 'Enregistrement...'
+                    : item.active
+                    ? 'Désactiver'
+                    : 'Activer'}
                 </button>
               </div>
             </div>
@@ -286,7 +334,7 @@ export default function Menu () {
           <div className='bg-white rounded-2xl w-full max-w-md p-6'>
             <div className='flex items-center justify-between mb-6'>
               <h2 className='text-lg font-bold text-[#1A1D24]'>
-                Ajouter un élément
+                {editingId ? 'Modifier l’élément' : 'Ajouter un élément'}
               </h2>
               <button
                 onClick={closeModal}
@@ -420,7 +468,7 @@ export default function Menu () {
                   disabled={uploading}
                   className='flex-1 rounded-lg bg-[#D9A15C] py-2.5 text-sm font-bold text-[#1A1D24] hover:bg-[#cd934f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                 >
-                  Ajouter
+                  {editingId ? 'Enregistrer' : 'Ajouter'}
                 </button>
               </div>
             </form>

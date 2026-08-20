@@ -9,7 +9,6 @@ import Reservation from './admin/Reservation'
 import Avis from './admin/Avis'
 import FAQ from './admin/Faq'
 import SEO from './admin/SEO'
-import Statistique from './admin/Statistique'
 import Parametres from './admin/Setting'
 import Messages from './admin/Messages'
 import Notifications from './admin/Notifications'
@@ -33,6 +32,12 @@ export default function Container ({
   const [notifCount, setNotifCount] = useState(notificationCount)
   const [reservationCount, setReservationCount] = useState(0)
   const [avisCount, setAvisCount] = useState(0)
+
+  const handleNotificationCountChange = change => {
+    setNotifCount(current =>
+      change === 'reset' ? 0 : Math.max(0, current + change)
+    )
+  }
 
   useEffect(() => {
     const chargerCompteurs = async () => {
@@ -68,7 +73,6 @@ export default function Container ({
     avis: { title: 'Avis clients', section: 'Modération des avis' },
     faq: { title: 'FAQ', section: 'Questions fréquentes' },
     seo: { title: 'SEO & Visibilité', section: 'Optimisation' },
-    stats: { title: 'Statistiques', section: 'Analyse de performance' },
     parametres: { title: 'Paramètres', section: 'Réglages du site' },
     messages: { title: 'Messages', section: 'Contact' },
     notifications: { title: 'Notifications', section: 'Alertes' }
@@ -111,14 +115,16 @@ export default function Container ({
       case 'seo':
         return <SEO />
 
-      case 'stats':
-        return <Statistique />
       case 'parametres':
         return <Parametres />
       case 'messages':
         return <Messages />
       case 'notifications':
-        return <Notifications />
+        return (
+          <Notifications
+            onNotificationCountChange={handleNotificationCountChange}
+          />
+        )
 
       default:
         return <Dashboard />
@@ -149,6 +155,7 @@ export default function Container ({
           notificationCount={notifCount}
           userInitials={initialesUtilisateur || userInitials}
           onVoirToutes={() => setActivePage('notifications')}
+          onNotificationCountChange={handleNotificationCountChange}
         />
 
         <main className='flex-1 overflow-y-auto p-3 bg-[#f5f1ea]'>

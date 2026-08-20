@@ -13,12 +13,9 @@ export const isValidEmail = (email) => {
   return emailRegex.test(email)
 }
 
-// Vérifie un téléphone français valide (+33, 06, 07, 01, etc.)
+// Vérifie qu'un téléphone contient uniquement des chiffres
 export const isValidPhone = (phone) => {
-  // Formats acceptés :
-  // 0612345678, 06 12 34 56 78, +33612345678, +33 6 12 34 56 78, 06.12.34.56.78, 06-12-34-56-78
-  const phoneRegex = /^(\+33|0033|0)[1-9]([\s.-]?\d{2}){4}$/
-  return phoneRegex.test(phone.replace(/[^\d+]/g, '')) || phoneRegex.test(phone)
+  return /^\d+$/.test(String(phone).trim())
 }
 
 // Vérifie un mot de passe fort (min 8 chars, 1 majuscule, 1 minuscule, 1 chiffre)
