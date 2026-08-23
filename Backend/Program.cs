@@ -28,6 +28,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<RestaurantDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+builder.Services.AddHttpClient("SendGrid", client =>
+{
+    client.BaseAddress = new Uri("https://api.sendgrid.com/v3/");
+});
+
 builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAvisService, AvisService>();
