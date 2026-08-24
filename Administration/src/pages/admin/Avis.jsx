@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Check, X } from 'lucide-react'
 import { avisApi } from '../../api'
+import AppModal from '../../components/AppModal'
 
 const avatarColors = [
   '#1A1D24',
@@ -15,15 +16,15 @@ function avatarColor (name) {
 }
 
 const statusMapping = {
-  'en_attente': 'attente',
-  'publie': 'publie',
-  'refuse': 'refuse'
+  en_attente: 'attente',
+  publie: 'publie',
+  refuse: 'refuse'
 }
 
 const reverseStatusMapping = {
-  'attente': 'en_attente',
-  'publie': 'publie',
-  'refuse': 'refuse'
+  attente: 'en_attente',
+  publie: 'publie',
+  refuse: 'refuse'
 }
 
 const tabs = [
@@ -51,6 +52,7 @@ export default function Avis () {
   const [tab, setTab] = useState('attente')
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(true)
+  const [reviewToDelete, setReviewToDelete] = useState(null)
 
   useEffect(() => {
     chargerAvis()
@@ -63,7 +65,9 @@ export default function Avis () {
         id: avis.id,
         name: avis.nomAffiche,
         stars: avis.note,
-        date: avis.dateAvis || new Date(avis.dateCreation).toISOString().split('T')[0],
+        date:
+          avis.dateAvis ||
+          new Date(avis.dateCreation).toISOString().split('T')[0],
         text: avis.commentaire,
         status: statusMapping[avis.statut] || 'attente'
       }))
@@ -84,16 +88,16 @@ export default function Avis () {
       }
       await chargerAvis()
     } catch (error) {
-      console.error('Erreur lors de la modération de l\'avis', error)
+      console.error("Erreur lors de la modération de l'avis", error)
     }
   }
 
-  const supprimerAvis = async (id) => {
+  const supprimerAvis = async id => {
     try {
       await avisApi.supprimer(id)
       await chargerAvis()
     } catch (error) {
-      console.error('Erreur lors de la suppression de l\'avis', error)
+      console.error("Erreur lors de la suppression de l'avis", error)
     }
   }
 
@@ -195,7 +199,7 @@ export default function Avis () {
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
               <div className='flex gap-2.5'>
                 {r.status !== 'publie' && (
-                  <button 
+                  <button
                     onClick={() => modererAvis(r.id, 'approuver')}
                     className='flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-full bg-[#E4F1E6] px-3.5 py-1.5 text-[13px] font-semibold text-[#4C8B5F] hover:bg-[#d8ebdb] transition-colors'
                   >
@@ -203,7 +207,7 @@ export default function Avis () {
                   </button>
                 )}
                 {r.status !== 'refuse' && (
-                  <button 
+                  <button
                     onClick={() => modererAvis(r.id, 'rejeter')}
                     className='flex flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-full bg-[#F7E1DE] px-3.5 py-1.5 text-[13px] font-semibold text-[#C0554A] hover:bg-[#f2d3cf] transition-colors'
                   >
@@ -211,11 +215,11 @@ export default function Avis () {
                   </button>
                 )}
               </div>
-              <button 
-                onClick={() => supprimerAvis(r.id)}
+              <button
+                onClick={() => setReviewToDelete(r)}
                 className='text-[13px] font-medium text-[#C0554A] hover:underline self-start sm:self-auto'
               >
-                Supprimer
+                {r.status === 'publie' ? 'Retirer' : 'Supprimer'}
               </button>
             </div>
           </div>
@@ -227,6 +231,26 @@ export default function Avis () {
           </div>
         )}
       </div>
+      {reviewToDelete && (
+        <AppModal
+          title={
+            reviewToDelete.status === 'publie'
+              ? 'Retirer l’avis publié ?'
+              : 'Supprimer l’avis ?'
+          }
+          message={`L’avis de ${reviewToDelete.name} sera retiré définitivement du site.`}
+          cancelLabel='Annuler'
+          confirmLabel={
+            reviewToDelete.status === 'publie' ? 'Retirer' : 'Supprimer'
+          }
+          danger
+          onClose={() => setReviewToDelete(null)}
+          onConfirm={async () => {
+            await supprimerAvis(reviewToDelete.id)
+            setReviewToDelete(null)
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -7,9 +7,15 @@ import Footer from '../components/Footer'
 import { reservationsApi } from '../api/reservation'
 import { utilisateursApi } from '../api/utilisateurs'
 import { avisApi } from '../api/avis'
+import AppModal from '../components/AppModal'
 
 export default function CompteClient () {
-  const { utilisateur, estConnecte, deconnecter, chargement: authChargement } = useAuth()
+  const {
+    utilisateur,
+    estConnecte,
+    deconnecter,
+    chargement: authChargement
+  } = useAuth()
   const navigate = useNavigate()
   const { t } = useLanguage()
   const [onglet, setOnglet] = useState('reservations')
@@ -28,6 +34,7 @@ export default function CompteClient () {
     note: 5,
     commentaire: ''
   })
+  const [modalMessage, setModalMessage] = useState('')
 
   useEffect(() => {
     if (authChargement) return
@@ -89,7 +96,7 @@ export default function CompteClient () {
     navigate('/')
   }
 
-  const handleAvisSubmit = async (e) => {
+  const handleAvisSubmit = async e => {
     e.preventDefault()
     try {
       await avisApi.creer({
@@ -99,13 +106,13 @@ export default function CompteClient () {
       })
       setAvisForm({ note: 5, commentaire: '' })
       setErreur(null)
-      alert('Avis envoyé avec succès !')
+      setModalMessage('Avis envoyé avec succès !')
     } catch (err) {
-      setErreur('Erreur lors de l\'envoi de l\'avis')
+      setErreur("Erreur lors de l'envoi de l'avis")
     }
   }
 
-  const handleAvisChange = (e) => {
+  const handleAvisChange = e => {
     const { name, value } = e.target
     setAvisForm(prev => ({ ...prev, [name]: value }))
   }
@@ -224,6 +231,13 @@ export default function CompteClient () {
       </div>
 
       <Footer />
+      {modalMessage && (
+        <AppModal
+          title='Avis envoyé'
+          message={modalMessage}
+          onClose={() => setModalMessage('')}
+        />
+      )}
     </div>
   )
 }
@@ -520,11 +534,13 @@ function OngletAvis ({ avisForm, onChange, onSubmit }) {
             Note
           </label>
           <div className='flex gap-2'>
-            {[1, 2, 3, 4, 5].map((star) => (
+            {[1, 2, 3, 4, 5].map(star => (
               <button
                 key={star}
                 type='button'
-                onClick={() => onChange({ target: { name: 'note', value: star } })}
+                onClick={() =>
+                  onChange({ target: { name: 'note', value: star } })
+                }
                 className={`text-3xl transition ${
                   star <= avisForm.note ? 'text-yellow-400' : 'text-gray-300'
                 }`}

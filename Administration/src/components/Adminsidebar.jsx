@@ -122,7 +122,7 @@ export default function AdminSidebar ({
               <button
                 key={key}
                 onClick={() => handleSelect(key)}
-                className={`group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                className={`admin-nav-item group relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                   isActive
                     ? 'bg-white/[0.06] text-white'
                     : 'text-slate-400 hover:bg-white/[0.04] hover:text-slate-200'

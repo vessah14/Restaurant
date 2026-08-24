@@ -13,6 +13,7 @@ import Connexion from './pages/Connexion'
 import Inscription from './pages/Inscription'
 import Reserver from './pages/Reserver'
 import CompteClient from './pages/CompteClient'
+import ReinitialiserMotDePasse from './pages/ReinitialiserMotDePasse'
 import ScrollToTop from './pages/ScrollToTop'
 import { visitesApi } from './api/visites'
 function App () {
@@ -38,6 +39,10 @@ function App () {
             <Route path='/Inscription' element={<Inscription />} />
             <Route path='/Reserver' element={<Reserver />} />
             <Route path='/Compte' element={<CompteClient />} />
+            <Route
+              path='/reinitialiser-mot-de-passe'
+              element={<ReinitialiserMotDePasse />}
+            />
           </Routes>
         </BrowserRouter>
       </LanguageProvider>

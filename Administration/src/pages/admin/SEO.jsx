@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AlertTriangle } from 'lucide-react'
 import { pagesApi } from '../../api'
+import AppModal from '../../components/AppModal'
 
 const pageLabels = {
   accueil: { label: 'Accueil', path: '/' },
@@ -44,6 +45,7 @@ export default function SEO () {
   const [pageData, setPageData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [modalMessage, setModalMessage] = useState(null)
   const page = pages.find(p => p.key === active)
 
   useEffect(() => {
@@ -93,10 +95,16 @@ export default function SEO () {
         metaDescriptionFr: pageData?.metaDescription || ''
       })
       await chargerPageData()
-      alert('Modifications enregistrées avec succès')
+      setModalMessage({
+        title: 'Modifications enregistrées',
+        message: 'Les modifications ont bien été enregistrées.'
+      })
     } catch (error) {
       console.error('Erreur lors de la sauvegarde', error)
-      alert('Erreur lors de la sauvegarde')
+      setModalMessage({
+        title: 'Erreur',
+        message: 'Erreur lors de la sauvegarde.'
+      })
     }
   }
 
@@ -250,6 +258,13 @@ export default function SEO () {
           )}
         </div>
       </div>
+      {modalMessage && (
+        <AppModal
+          title={modalMessage.title}
+          message={modalMessage.message}
+          onClose={() => setModalMessage(null)}
+        />
+      )}
     </div>
   )
 }

@@ -1,7 +1,10 @@
 import { useLanguage } from '../i18n/useLanguage'
+import { useState } from 'react'
+import AppModal from '../components/AppModal'
 
 export default function Forms2 ({ reservation, setReservation, setStep }) {
   const { t } = useLanguage()
+  const [modalMessage, setModalMessage] = useState('')
 
   const steps = [
     { number: 1, label: t.reserver.dateHeure, status: 'done' },
@@ -20,7 +23,7 @@ export default function Forms2 ({ reservation, setReservation, setStep }) {
       reservation.email === '' ||
       reservation.telephone === ''
     ) {
-      alert(t.validation.requireChamp)
+      setModalMessage(t.validation.requireChamp)
       return
     }
     setStep(3)
@@ -161,6 +164,13 @@ export default function Forms2 ({ reservation, setReservation, setStep }) {
           {t.reserver.infoPratiquesDesc}
         </p>
       </div>
+      {modalMessage && (
+        <AppModal
+          title='Informations manquantes'
+          message={modalMessage}
+          onClose={() => setModalMessage('')}
+        />
+      )}
     </div>
   )
 }

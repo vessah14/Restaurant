@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { Check, X, Search, Calendar } from 'lucide-react'
 import { reservationsApi } from '../../api'
 import { useAuthAdmin } from '../../context/AuthAdminContext'
+import AppModal from '../../components/AppModal'
 
 const STATUS_OPTIONS = [
   { value: 'en_attente', label: 'En attente' },
@@ -18,14 +19,8 @@ function ReservationModal ({ reservation, onClose, onStatusChange, onDelete }) {
   if (!reservation) return null
 
   const handleDelete = () => {
-    if (
-      window.confirm(
-        `Supprimer définitivement la réservation de ${reservation.client} ?`
-      )
-    ) {
-      onDelete?.(reservation.id)
-      onClose?.()
-    }
+    onDelete?.(reservation)
+    onClose?.()
   }
 
   return (
@@ -180,7 +175,6 @@ function CalendarView ({ reservations, onSelect }) {
   )
 }
 
-
 const STATUS_STYLES = {
   en_attente: { label: 'En attente', className: 'bg-amber-50 text-amber-700' },
   confirmee: {
@@ -263,16 +257,14 @@ function ReservationCard ({ r, onSelect, onConfirm, onCancel }) {
   )
 }
 
-function ReservationsPage ({
-  onStatusChange,
-  onDelete
-}) {
+function ReservationsPage ({ onStatusChange, onDelete }) {
   const [reservations, setReservations] = useState([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('tous')
   const [view, setView] = useState('tableau')
+  const [reservationToDelete, setReservationToDelete] = useState(null)
 
   useEffect(() => {
     chargerReservations()
@@ -284,7 +276,11 @@ function ReservationsPage ({
       const formattedReservations = data.map(resa => ({
         id: resa.id,
         client: `${resa.nom} ${resa.prenom}`,
-        date: new Date(resa.dateReservation).toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+        date: new Date(resa.dateReservation).toLocaleDateString('fr-FR', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }),
         heure: resa.heureReservation,
         pers: resa.nombrePersonnes,
         tel: resa.telephone,
@@ -312,7 +308,7 @@ function ReservationsPage ({
 
   const handleConfirm = r => updateStatus(r.id, 'confirmee')
   const handleCancel = r => updateStatus(r.id, 'annulee')
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       await reservationsApi.modifierStatut(id, 'annulee')
       await chargerReservations()
@@ -321,6 +317,8 @@ function ReservationsPage ({
       console.error('Erreur lors de la suppression de la réservation', error)
     }
   }
+
+  const requestDelete = reservation => setReservationToDelete(reservation)
 
   const filtered = useMemo(() => {
     return reservations.filter(r => {
@@ -516,8 +514,22 @@ function ReservationsPage ({
         reservation={selected}
         onClose={() => setSelected(null)}
         onStatusChange={updateStatus}
-        onDelete={handleDelete}
+        onDelete={requestDelete}
       />
+      {reservationToDelete && (
+        <AppModal
+          title='Supprimer la réservation ?'
+          message={`Supprimer définitivement la réservation de ${reservationToDelete.client} ?`}
+          cancelLabel='Annuler'
+          confirmLabel='Supprimer'
+          danger
+          onClose={() => setReservationToDelete(null)}
+          onConfirm={async () => {
+            await handleDelete(reservationToDelete.id)
+            setReservationToDelete(null)
+          }}
+        />
+      )}
     </div>
   )
 }

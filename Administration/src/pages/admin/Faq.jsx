@@ -28,20 +28,20 @@ function Faq1 () {
     }
   }
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     try {
       await faqApi.creer({
         ordreAffichage: faqs.length + 1,
         questionFr: formData.questionFr,
         reponseFr: formData.reponseFr,
-        questionEn: formData.questionEn || formData.questionFr,
-        reponseEn: formData.reponseEn || formData.reponseFr
+        questionEn: formData.questionEn,
+        reponseEn: formData.reponseEn
       })
       await chargerFaqs()
       setShowModal(false)
@@ -56,7 +56,7 @@ function Faq1 () {
     }
   }
 
-  const handleSupprimer = async (id) => {
+  const handleSupprimer = async id => {
     try {
       await faqApi.supprimer(id)
       await chargerFaqs()
@@ -97,7 +97,7 @@ function Faq1 () {
             {faqs.length} questions
           </p>
         </div>
-        <button 
+        <button
           onClick={openModal}
           className='w-full sm:w-auto flex items-center justify-center gap-1.5 rounded-[10px] bg-[#D9A15C] px-[18px] py-2.5 text-sm font-bold text-[#1A1D24] hover:bg-[#cd934f] transition-colors'
         >
@@ -120,7 +120,9 @@ function Faq1 () {
                 <div className='text-[15px] font-bold text-[#1A1D24]'>
                   {f.question}
                 </div>
-                <div className='mt-1.5 text-[13px] text-[#8A8471]'>{f.reponse}</div>
+                <div className='mt-1.5 text-[13px] text-[#8A8471]'>
+                  {f.reponse}
+                </div>
               </div>
             </div>
 
@@ -145,8 +147,10 @@ function Faq1 () {
         <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
           <div className='bg-white rounded-2xl w-full max-w-md p-6'>
             <div className='flex items-center justify-between mb-6'>
-              <h2 className='text-lg font-bold text-[#1A1D24]'>Ajouter une FAQ</h2>
-              <button 
+              <h2 className='text-lg font-bold text-[#1A1D24]'>
+                Ajouter une FAQ
+              </h2>
+              <button
                 onClick={closeModal}
                 className='p-1 hover:bg-gray-100 rounded-full'
               >

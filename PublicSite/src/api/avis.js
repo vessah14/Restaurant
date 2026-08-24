@@ -2,7 +2,7 @@ import { api } from "./client";
 
 export const avisApi = {
   // Public
-  getPublies: () => api.get("/api/Avis"),
+  getPublies: (langue = "fr") => api.get(`/api/Avis?langue=${langue}`),
 
   creer: (donnees) => api.post("/api/Avis", donnees),
 

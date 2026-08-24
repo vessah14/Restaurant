@@ -33,6 +33,8 @@ builder.Services.AddHttpClient("SendGrid", client =>
     client.BaseAddress = new Uri("https://api.sendgrid.com/v3/");
 });
 
+builder.Services.AddHttpClient("DeepL");
+
 builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAvisService, AvisService>();
@@ -44,6 +46,7 @@ builder.Services.AddScoped<IReseauSocialService, ReseauSocialService>();
 builder.Services.AddScoped<IPageContenuService, PageContenuService>();
 builder.Services.AddScoped<IStatistiquesService, StatistiquesService>();
 builder.Services.AddScoped<IFaqService, FaqService>();
+builder.Services.AddScoped<ITranslationService, TranslationService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IContactInfosService, ContactInfosService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();

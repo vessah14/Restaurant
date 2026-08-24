@@ -9,33 +9,51 @@ namespace Backend.Services
     public class FaqService : IFaqService
     {
         private readonly RestaurantDbContext _context;
+        private readonly ITranslationService _translationService;
 
-        public FaqService(RestaurantDbContext context)
+        public FaqService(RestaurantDbContext context, ITranslationService translationService)
         {
             _context = context;
+            _translationService = translationService;
         }
 
         public async Task<IEnumerable<FaqDto>> GetAllAsync(string langue)
         {
             langue = langue.ToLower() == "en" ? "en" : "fr"; // repli sur FR si valeur inattendue
 
-            return await _context.Faqs
+            var faqs = await _context.Faqs
                 .Include(f => f.Traductions)
                 .OrderBy(f => f.OrdreAffichage)
-                .Select(f => new FaqDto
-                {
-                    Id = f.Id,
-                    OrdreAffichage = f.OrdreAffichage,
-                    Question = f.Traductions
-                        .Where(t => t.Langue == langue)
-                        .Select(t => t.Question)
-                        .FirstOrDefault() ?? string.Empty,
-                    Reponse = f.Traductions
-                        .Where(t => t.Langue == langue)
-                        .Select(t => t.Reponse)
-                        .FirstOrDefault() ?? string.Empty
-                })
                 .ToListAsync();
+
+            var resultats = new List<FaqDto>();
+            foreach (var faq in faqs)
+            {
+                var francais = faq.Traductions.FirstOrDefault(t => t.Langue == "fr");
+                var traduction = faq.Traductions.FirstOrDefault(t => t.Langue == langue);
+                var question = traduction?.Question;
+                var reponse = traduction?.Reponse;
+
+                if (langue == "en")
+                {
+                    question = string.IsNullOrWhiteSpace(question)
+                        ? await _translationService.TraduireAsync(francais?.Question ?? string.Empty, "en")
+                        : question;
+                    reponse = string.IsNullOrWhiteSpace(reponse)
+                        ? await _translationService.TraduireAsync(francais?.Reponse ?? string.Empty, "en")
+                        : reponse;
+                }
+
+                resultats.Add(new FaqDto
+                {
+                    Id = faq.Id,
+                    OrdreAffichage = faq.OrdreAffichage,
+                    Question = question ?? string.Empty,
+                    Reponse = reponse ?? string.Empty
+                });
+            }
+
+            return resultats;
         }
 
         public async Task<FaqDto> CreerAsync(CreerFaqDto dto)
@@ -46,10 +64,19 @@ namespace Backend.Services
                 DateMaj = DateTime.UtcNow,
                 Traductions = new List<FaqTraduction>
                 {
-                    new() { Langue = "fr", Question = dto.QuestionFr, Reponse = dto.ReponseFr },
-                    new() { Langue = "en", Question = dto.QuestionEn, Reponse = dto.ReponseEn }
+                    new() { Langue = "fr", Question = dto.QuestionFr, Reponse = dto.ReponseFr }
                 }
             };
+
+            if (!string.IsNullOrWhiteSpace(dto.QuestionEn) || !string.IsNullOrWhiteSpace(dto.ReponseEn))
+            {
+                faq.Traductions.Add(new FaqTraduction
+                {
+                    Langue = "en",
+                    Question = dto.QuestionEn,
+                    Reponse = dto.ReponseEn
+                });
+            }
 
             _context.Faqs.Add(faq);
             await _context.SaveChangesAsync();

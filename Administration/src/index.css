@@ -1,1 +1,65 @@
 @import "tailwindcss";
+
+@keyframes admin-page-enter {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes admin-nav-enter {
+	from {
+		opacity: 0;
+		transform: translateX(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.admin-content > * {
+	animation: admin-page-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-content button {
+	transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.admin-content button:hover:not(:disabled) {
+	transform: translateY(-1px);
+}
+
+.admin-nav-item {
+	animation: admin-nav-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-nav-item:nth-child(2) { animation-delay: 35ms; }
+.admin-nav-item:nth-child(3) { animation-delay: 70ms; }
+.admin-nav-item:nth-child(4) { animation-delay: 105ms; }
+.admin-nav-item:nth-child(5) { animation-delay: 140ms; }
+.admin-nav-item:nth-child(6) { animation-delay: 175ms; }
+.admin-nav-item:nth-child(7) { animation-delay: 210ms; }
+.admin-nav-item:nth-child(8) { animation-delay: 245ms; }
+.admin-nav-item:nth-child(9) { animation-delay: 280ms; }
+.admin-nav-item:nth-child(10) { animation-delay: 315ms; }
+.admin-nav-item:nth-child(11) { animation-delay: 350ms; }
+
+@media (prefers-reduced-motion: reduce) {
+	.admin-content > *,
+	.admin-nav-item {
+		animation: none;
+	}
+
+	.admin-content button {
+		transition: none;
+	}
+
+	.admin-content button:hover:not(:disabled) {
+		transform: none;
+	}
+}

@@ -1,8 +1,11 @@
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { useLanguage } from '../i18n/useLanguage'
+import { useState } from 'react'
+import AppModal from '../components/AppModal'
 
 export default function Forms1 ({ reservation, setReservation, setStep }) {
   const { t } = useLanguage()
+  const [modalMessage, setModalMessage] = useState('')
   const horaires = [
     '12:00',
     '12:30',
@@ -35,7 +38,7 @@ export default function Forms1 ({ reservation, setReservation, setStep }) {
 
   const handleNext = () => {
     if (reservation.dateReservation === '') {
-      alert(t.validation.dateRequis)
+      setModalMessage(t.validation.dateRequis)
       return
     }
 
@@ -301,6 +304,13 @@ export default function Forms1 ({ reservation, setReservation, setStep }) {
           </p>
         </div>
       </div>
+      {modalMessage && (
+        <AppModal
+          title='Informations manquantes'
+          message={modalMessage}
+          onClose={() => setModalMessage('')}
+        />
+      )}
     </section>
   )
 }

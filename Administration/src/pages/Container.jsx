@@ -158,7 +158,7 @@ export default function Container ({
           onNotificationCountChange={handleNotificationCountChange}
         />
 
-        <main className='flex-1 overflow-y-auto p-3 bg-[#f5f1ea]'>
+        <main className='admin-content flex-1 overflow-y-auto p-3 bg-[#f5f1ea]'>
           {renderContent()}
         </main>
       </div>

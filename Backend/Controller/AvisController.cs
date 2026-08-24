@@ -20,9 +20,9 @@ namespace Backend.Controllers
         // Routes PUBLIQUES
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AvisDto>>> GetPublies()
+        public async Task<ActionResult<IEnumerable<AvisDto>>> GetPublies([FromQuery] string langue = "fr")
         {
-            var avis = await _avisService.GetPubliesAsync();
+            var avis = await _avisService.GetPubliesAsync(langue);
             return Ok(avis);
         }
 
@@ -78,6 +78,14 @@ namespace Backend.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Supprimer(long id)
+        {
+            var supprime = await _avisService.SupprimerAsync(id);
+            return supprime ? NoContent() : NotFound();
         }
     }
 }

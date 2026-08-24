@@ -9,19 +9,33 @@ namespace Backend.Services
     public class AvisService : IAvisService
     {
         private readonly RestaurantDbContext _context;
+        private readonly ITranslationService _translationService;
 
-        public AvisService(RestaurantDbContext context)
+        public AvisService(RestaurantDbContext context, ITranslationService translationService)
         {
             _context = context;
+            _translationService = translationService;
         }
 
-        public async Task<IEnumerable<AvisDto>> GetPubliesAsync()
+        public async Task<IEnumerable<AvisDto>> GetPubliesAsync(string langue)
         {
-            return await _context.Avis
+            langue = langue.ToLowerInvariant() == "en" ? "en" : "fr";
+            var avisPublies = await _context.Avis
                 .Where(a => a.Statut == "publie")
                 .OrderByDescending(a => a.DateAvis)
-                .Select(a => MapVersDto(a))
                 .ToListAsync();
+
+            var resultats = new List<AvisDto>();
+            foreach (var avis in avisPublies)
+            {
+                var dto = MapVersDto(avis);
+                if (langue == "en")
+                    dto.Commentaire = await _translationService.TraduireAsync(dto.Commentaire, "en");
+
+                resultats.Add(dto);
+            }
+
+            return resultats;
         }
 
         public async Task<IEnumerable<AvisDto>> GetAllAsync(string? statut = null)
@@ -77,6 +91,16 @@ namespace Backend.Services
             await _context.SaveChangesAsync();
 
             return MapVersDto(avis);
+        }
+
+        public async Task<bool> SupprimerAsync(long id)
+        {
+            var avis = await _context.Avis.FindAsync(id);
+            if (avis is null) return false;
+
+            _context.Avis.Remove(avis);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         private static AvisDto MapVersDto(Avis a) => new()

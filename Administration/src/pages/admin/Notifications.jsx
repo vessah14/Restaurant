@@ -11,6 +11,7 @@ import {
   Clock
 } from 'lucide-react'
 import { notificationsApi } from '../../api'
+import AppModal from '../../components/AppModal'
 
 const TYPE_CONFIG = {
   inscription: {
@@ -54,6 +55,8 @@ export default function Notifications ({ onNotificationCountChange }) {
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('toutes')
   const [error, setError] = useState(null)
+  const [notificationToDelete, setNotificationToDelete] = useState(null)
+  const [modalMessage, setModalMessage] = useState(null)
 
   useEffect(() => {
     chargerNotifications()
@@ -106,14 +109,12 @@ export default function Notifications ({ onNotificationCountChange }) {
   }
 
   const handleSupprimer = async id => {
-    if (!window.confirm('Voulez-vous vraiment supprimer cette notification ?'))
-      return
     try {
       await notificationsApi.supprimer(id)
       setNotifications(prev => prev.filter(n => n.id !== id))
     } catch (err) {
       console.error('Erreur suppression notification:', err)
-      alert('Impossible de supprimer cette notification.')
+      setModalMessage('Impossible de supprimer cette notification.')
     }
   }
 
@@ -267,7 +268,7 @@ export default function Notifications ({ onNotificationCountChange }) {
                         </button>
                       )}
                       <button
-                        onClick={() => handleSupprimer(notification.id)}
+                        onClick={() => setNotificationToDelete(notification.id)}
                         className='p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors'
                         title='Supprimer la notification'
                       >
@@ -280,6 +281,27 @@ export default function Notifications ({ onNotificationCountChange }) {
             )
           })}
         </div>
+      )}
+      {notificationToDelete && (
+        <AppModal
+          title='Supprimer la notification ?'
+          message='Voulez-vous vraiment supprimer cette notification ?'
+          cancelLabel='Annuler'
+          confirmLabel='Supprimer'
+          danger
+          onClose={() => setNotificationToDelete(null)}
+          onConfirm={async () => {
+            await handleSupprimer(notificationToDelete)
+            setNotificationToDelete(null)
+          }}
+        />
+      )}
+      {modalMessage && (
+        <AppModal
+          title='Une erreur est survenue'
+          message={modalMessage}
+          onClose={() => setModalMessage(null)}
+        />
       )}
     </div>
   )

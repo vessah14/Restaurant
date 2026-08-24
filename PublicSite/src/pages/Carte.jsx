@@ -7,6 +7,14 @@ import Seo from '../components/Seo'
 import { carteApi } from '../api/carte'
 import { mediaUrl } from '../api/client'
 
+const categoryIcons = {
+  tous: '🍽️',
+  entrees: '🥗',
+  plats: '🍲',
+  desserts: '🍰',
+  boissons: '🍹'
+}
+
 export default function CartePricipal () {
   return (
     <>
@@ -109,9 +117,15 @@ function Filter () {
             }
             `}
           >
-            {categories.find(categoryItem => categoryItem.code === item)?.nom ||
-              t.carte[item.toLowerCase()] ||
-              item}
+            <span aria-hidden='true' className='mr-2 text-base'>
+              {categoryIcons[item.toLowerCase()] || '🍽️'}
+            </span>
+            <span>
+              {categories.find(categoryItem => categoryItem.code === item)
+                ?.nom ||
+                t.carte[item.toLowerCase()] ||
+                item}
+            </span>
           </button>
         ))}
       </div>

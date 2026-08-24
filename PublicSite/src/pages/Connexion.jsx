@@ -5,6 +5,8 @@ import { useLanguage } from '../i18n/useLanguage'
 import { validateLogin, hasErrors } from '../utils/validation'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { authApi } from '../api/auth'
+import AppModal from '../components/AppModal'
 
 export default function Connexion () {
   return (
@@ -53,6 +55,10 @@ function Forms () {
   const navigate = useNavigate()
   const location = useLocation()
   const [chargement, setChargement] = useState(false)
+  const [oubliModal, setOubliModal] = useState(false)
+  const [emailOubli, setEmailOubli] = useState('')
+  const [oubliChargement, setOubliChargement] = useState(false)
+  const [oubliMessage, setOubliMessage] = useState('')
   const messageSucces = location.state?.message
   const { connecter } = useAuth()
 
@@ -87,6 +93,24 @@ function Forms () {
       setErrors({ motDePasse: err.message })
     } finally {
       setChargement(false)
+    }
+  }
+
+  const handleMotDePasseOublie = async e => {
+    e.preventDefault()
+    setOubliChargement(true)
+    setOubliMessage('')
+    try {
+      await authApi.motDePasseOublie(emailOubli)
+      setOubliMessage(
+        'Si cette adresse existe, un lien de réinitialisation a été envoyé.'
+      )
+    } catch (err) {
+      setOubliMessage(
+        err.message || 'Impossible d’envoyer le lien de réinitialisation.'
+      )
+    } finally {
+      setOubliChargement(false)
     }
   }
 
@@ -151,13 +175,16 @@ function Forms () {
               )}
             </div>
             <div>
-              <a
-                href=''
-                onClick={e => e.preventDefault()}
+              <button
+                type='button'
+                onClick={() => {
+                  setOubliModal(true)
+                  setOubliMessage('')
+                }}
                 className='text-sm flex justify-end underline text-gray-500'
               >
                 {t.connexion.motDePasseOublie}
-              </a>
+              </button>
             </div>
             <button
               type='submit'
@@ -175,6 +202,54 @@ function Forms () {
           </span>
         </div>
       </div>
+      {oubliModal && (
+        <div
+          className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'
+          onClick={() => setOubliModal(false)}
+        >
+          <div
+            className='w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl'
+            onClick={event => event.stopPropagation()}
+          >
+            <h2 className="font-['Playfair_Display'] text-2xl text-gray-900">
+              Mot de passe oublié
+            </h2>
+            <p className='mt-2 text-sm text-gray-500'>
+              Saisissez votre adresse e-mail pour recevoir un lien de
+              réinitialisation.
+            </p>
+            <form onSubmit={handleMotDePasseOublie} className='mt-5 space-y-4'>
+              <input
+                type='email'
+                required
+                value={emailOubli}
+                onChange={event => setEmailOubli(event.target.value)}
+                placeholder='votre@email.com'
+                className='w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[#c9a55c] focus:outline-none'
+              />
+              {oubliMessage && (
+                <p className='text-sm text-gray-600'>{oubliMessage}</p>
+              )}
+              <div className='flex gap-3'>
+                <button
+                  type='button'
+                  onClick={() => setOubliModal(false)}
+                  className='flex-1 rounded-xl border border-gray-300 py-3 font-semibold text-gray-700'
+                >
+                  Annuler
+                </button>
+                <button
+                  type='submit'
+                  disabled={oubliChargement}
+                  className='flex-1 rounded-xl bg-gray-800 py-3 font-semibold text-white disabled:opacity-50'
+                >
+                  {oubliChargement ? 'Envoi...' : 'Envoyer le lien'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   )
 }

@@ -27,6 +27,7 @@ function SourceBadge ({ source, dark }) {
 
 export default function Commentaire () {
   const { t } = useLanguage()
+  const { lang } = useLanguage()
   const [testimonials, setTestimonials] = useState([])
   const [index, setIndex] = useState(0)
   const total = testimonials.length
@@ -37,7 +38,7 @@ export default function Commentaire () {
   useEffect(() => {
     let active = true
     avisApi
-      .getPublies()
+      .getPublies(lang)
       .then(data => {
         if (active) setTestimonials(data)
       })
@@ -47,7 +48,7 @@ export default function Commentaire () {
     return () => {
       active = false
     }
-  }, [])
+  }, [lang])
 
   const goPrev = () => setIndex(i => (i - 1 + total) % total)
   const goNext = () => setIndex(i => (i + 1) % total)

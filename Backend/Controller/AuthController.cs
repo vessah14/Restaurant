@@ -64,10 +64,17 @@ namespace Backend.Controllers
         [HttpPost("reset-mot-de-passe")]
         public async Task<IActionResult> ResetMotDePasse(ResetMotDePasseDto dto)
         {
-            var succes = await _authService.ResetMotDePasseAsync(dto);
-            return succes
-                ? Ok(new { message = "Mot de passe réinitialisé avec succès." })
-                : BadRequest(new { message = "Lien invalide ou expiré." });
+            try
+            {
+                var succes = await _authService.ResetMotDePasseAsync(dto);
+                return succes
+                    ? Ok(new { message = "Mot de passe réinitialisé avec succès." })
+                    : BadRequest(new { message = "Lien invalide ou expiré." });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }
