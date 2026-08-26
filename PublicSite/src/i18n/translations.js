@@ -2,6 +2,7 @@ export const translations = {
   fr: {
     // Navigation
     nav: {
+      accueil: "Accueil",
       histoire: "Notre histoire",
       carte: "La carte",
       galerie: "Galerie",
@@ -407,6 +408,7 @@ export const translations = {
   en: {
     // Navigation
     nav: {
+      accueil: "Home",
       histoire: "Our Story",
       carte: "The Menu",
       galerie: "Gallery",

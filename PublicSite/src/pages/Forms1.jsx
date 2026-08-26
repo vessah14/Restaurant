@@ -1,11 +1,18 @@
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { useLanguage } from '../i18n/useLanguage'
-import { useState } from 'react'
-import AppModal from '../components/AppModal'
+import { useEffect, useState } from 'react'
+import ToastNotification from '../components/ToastNotification'
 
 export default function Forms1 ({ reservation, setReservation, setStep }) {
   const { t } = useLanguage()
   const [modalMessage, setModalMessage] = useState('')
+
+  useEffect(() => {
+    if (!modalMessage) return
+
+    const timeoutId = setTimeout(() => setModalMessage(''), 2000)
+    return () => clearTimeout(timeoutId)
+  }, [modalMessage])
   const horaires = [
     '12:00',
     '12:30',
@@ -305,8 +312,7 @@ export default function Forms1 ({ reservation, setReservation, setStep }) {
         </div>
       </div>
       {modalMessage && (
-        <AppModal
-          title='Informations manquantes'
+        <ToastNotification
           message={modalMessage}
           onClose={() => setModalMessage('')}
         />

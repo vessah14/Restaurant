@@ -1,10 +1,17 @@
 import { useLanguage } from '../i18n/useLanguage'
-import { useState } from 'react'
-import AppModal from '../components/AppModal'
+import { useEffect, useState } from 'react'
+import ToastNotification from '../components/ToastNotification'
 
 export default function Forms2 ({ reservation, setReservation, setStep }) {
   const { t } = useLanguage()
   const [modalMessage, setModalMessage] = useState('')
+
+  useEffect(() => {
+    if (!modalMessage) return
+
+    const timeoutId = setTimeout(() => setModalMessage(''), 2000)
+    return () => clearTimeout(timeoutId)
+  }, [modalMessage])
 
   const steps = [
     { number: 1, label: t.reserver.dateHeure, status: 'done' },
@@ -165,8 +172,7 @@ export default function Forms2 ({ reservation, setReservation, setStep }) {
         </p>
       </div>
       {modalMessage && (
-        <AppModal
-          title='Informations manquantes'
+        <ToastNotification
           message={modalMessage}
           onClose={() => setModalMessage('')}
         />

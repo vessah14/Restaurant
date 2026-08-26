@@ -422,7 +422,12 @@ function Body () {
                 <FaPhoneAlt size={22} style={{ color: '#C4A060' }} />
                 <div className='flex flex-col'>
                   <span style={{ color: '#C4A060' }}>{t.home.telephone}</span>
-                  <span>+33 (0)1 46 33 37 08</span>
+                  <a
+                    href='tel:+33146333708'
+                    className='hover:text-[#C4A060] transition-colors'
+                  >
+                    +33 (0)1 46 33 37 08
+                  </a>
                 </div>
               </div>
 

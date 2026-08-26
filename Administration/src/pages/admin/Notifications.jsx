@@ -111,7 +111,13 @@ export default function Notifications ({ onNotificationCountChange }) {
   const handleSupprimer = async id => {
     try {
       await notificationsApi.supprimer(id)
-      setNotifications(prev => prev.filter(n => n.id !== id))
+      setNotifications(prev => {
+        const notification = prev.find(n => n.id === id)
+        if (notification && !notification.estLu) {
+          onNotificationCountChange?.(-1)
+        }
+        return prev.filter(n => n.id !== id)
+      })
     } catch (err) {
       console.error('Erreur suppression notification:', err)
       setModalMessage('Impossible de supprimer cette notification.')

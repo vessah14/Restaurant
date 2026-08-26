@@ -56,6 +56,7 @@ export default function Navbarre2 () {
   const { utilisateur, estConnecte } = useAuth()
 
   const navigation = [
+    { name: t.nav.accueil, route: '/' },
     { name: t.nav.histoire, route: '/About' },
     { name: t.nav.carte, route: '/Carte' },
     { name: t.nav.galerie, route: '/Galerie' },
@@ -122,7 +123,7 @@ export default function Navbarre2 () {
 
           <div className='flex flex-col justify-center shrink-0'>
             <Link
-              to='/'
+              to='/About'
               className="
               text-2xl
               tracking-[0.2em]

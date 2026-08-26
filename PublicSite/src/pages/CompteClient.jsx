@@ -313,16 +313,16 @@ function OngletReservations ({ reservations }) {
               </p>
               <span
                 className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                  reservation.statut === 'confirmée'
+                  reservation.statut === 'confirmee'
                     ? 'bg-green-100 text-green-700'
-                    : reservation.statut === 'annulée'
+                    : reservation.statut === 'annulee'
                     ? 'bg-red-100 text-red-700'
                     : 'bg-yellow-100 text-yellow-700'
                 }`}
               >
-                {reservation.statut === 'confirmée'
+                {reservation.statut === 'confirmee'
                   ? t.compte?.confirmee
-                  : reservation.statut === 'annulée'
+                  : reservation.statut === 'annulee'
                   ? t.compte?.annulee
                   : t.compte?.enAttente}
               </span>
