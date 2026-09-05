@@ -1,4 +1,4 @@
-import AdminSidebar from '../components/AdminSidebar'
+import AdminSidebar from '../components/Adminsidebar'
 import HideBar from '../components/HideBar'
 import Dashboard from './admin/Dashboard'
 import Galerie from './admin/Galerie'
