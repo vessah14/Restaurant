@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5150";
+const API_URL =
+  import.meta.env.VITE_API_URL || "https://restaurant-sxxt.onrender.com";
 
 export function mediaUrl(path) {
   if (!path || path.startsWith("http://") || path.startsWith("https://")) {
@@ -34,8 +35,11 @@ async function request(endpoint, options = {}) {
 
 export const api = {
   get: (endpoint) => request(endpoint),
-  post: (endpoint, body) => request(endpoint, { method: "POST", body: JSON.stringify(body) }),
-  put: (endpoint, body) => request(endpoint, { method: "PUT", body: JSON.stringify(body) }),
-  patch: (endpoint, body) => request(endpoint, { method: "PATCH", body: JSON.stringify(body) }),
+  post: (endpoint, body) =>
+    request(endpoint, { method: "POST", body: JSON.stringify(body) }),
+  put: (endpoint, body) =>
+    request(endpoint, { method: "PUT", body: JSON.stringify(body) }),
+  patch: (endpoint, body) =>
+    request(endpoint, { method: "PATCH", body: JSON.stringify(body) }),
   delete: (endpoint) => request(endpoint, { method: "DELETE" }),
 };
