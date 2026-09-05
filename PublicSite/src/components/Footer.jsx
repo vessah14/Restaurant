@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/useLanguage'
 import LanguageSwitcher from './LanguageSwitcher'
 
+const adminUrl = import.meta.env.VITE_ADMIN_URL || 'http://localhost:8082'
+
 export default function Footer () {
   const { t } = useLanguage()
   return (
@@ -120,6 +122,14 @@ export default function Footer () {
                     >
                       {t.footer.contact}
                     </Link>
+                    <a
+                      href={adminUrl}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='block mt-2 text-sm hover:underline hover:text-[#C4A060] transition-colors'
+                    >
+                      Administration
+                    </a>
                   </div>
                 </div>
 

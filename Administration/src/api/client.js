@@ -94,9 +94,15 @@ class ApiClient {
           window.dispatchEvent(new Event('auth:unauthorized'))
         }
 
+        const validationErrors = errorData.errors
+          ? Object.values(errorData.errors).flat().join(' ')
+          : ''
+
         throw new Error(
           errorData.message ||
             errorData.error ||
+            validationErrors ||
+            errorData.title ||
             `Erreur HTTP ${response.status}`
         )
       }

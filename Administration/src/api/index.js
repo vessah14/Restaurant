@@ -86,6 +86,7 @@ export const statistiquesApi = {
 };
 
 export const platsApi = {
+  getCarte: () => api.get('/api/Plats/carte'),
   // Récupérer tous les plats
   getAll: () => api.get("/api/Plats"),
 

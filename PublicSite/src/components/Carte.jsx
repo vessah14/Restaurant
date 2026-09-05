@@ -16,11 +16,11 @@ export default function Carte({name,description,image,price}) {
         
 
         <div className="px-6 py-4">
-          <h1 className="text-xl font-['Playfair_Display'] font-black  text-gray-800 ">
+          <h1 className="break-words text-xl font-['Playfair_Display'] font-black text-gray-800">
             {name}
           </h1>
 
-          <p className="py-2 text-gray-400 ">
+          <p className="break-words py-2 text-gray-400">
             {description}
           </p>
         </div>

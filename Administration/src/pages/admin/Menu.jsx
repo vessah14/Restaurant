@@ -18,12 +18,14 @@ const getCategoryCount = (items, code) => {
 export default function Menu () {
   const [active, setActive] = useState('plats')
   const [allItems, setAllItems] = useState([])
+  const [categoryIds, setCategoryIds] = useState({})
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [updatingId, setUpdatingId] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('')
   const [formData, setFormData] = useState({
     nom: '',
     description: '',
@@ -37,10 +39,28 @@ export default function Menu () {
     chargerPlats()
   }, [])
 
+  useEffect(() => {
+    if (!formData.imageFile) {
+      setImagePreviewUrl('')
+      return undefined
+    }
+
+    const objectUrl = URL.createObjectURL(formData.imageFile)
+    setImagePreviewUrl(objectUrl)
+
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [formData.imageFile])
+
   const chargerPlats = async () => {
     try {
-      const data = await platsApi.getAll()
+      const [data, carte] = await Promise.all([
+        platsApi.getAll(),
+        platsApi.getCarte()
+      ])
       setAllItems(data)
+      setCategoryIds(
+        Object.fromEntries(carte.map(categorie => [categorie.code, categorie.id]))
+      )
     } catch (error) {
       console.error('Erreur lors du chargement des plats', error)
     } finally {
@@ -92,14 +112,11 @@ export default function Menu () {
     setUploading(true)
 
     try {
-      const categorieId =
-        formData.categorie === 'entrees'
-          ? 1
-          : formData.categorie === 'plats'
-          ? 2
-          : formData.categorie === 'desserts'
-          ? 3
-          : 4
+      const categorieId = categoryIds[formData.categorie]
+
+      if (!categorieId) {
+        throw new Error('La categorie selectionnee est introuvable. Rechargez la page puis reessayez.')
+      }
 
       const formDataToSend = new FormData()
       formDataToSend.append('categorieId', categorieId)
@@ -272,9 +289,9 @@ export default function Menu () {
             </div>
 
             <div className='px-4 pb-4 pt-3.5'>
-              <div className='flex items-center justify-between gap-2'>
+              <div className='flex items-start justify-between gap-2'>
                 <span
-                  className={`text-base font-bold truncate ${
+                  className={`min-w-0 break-all text-base font-bold ${
                     item.active ? 'text-[#1A1D24]' : 'text-[#B3AC98]'
                   }`}
                 >
@@ -285,7 +302,7 @@ export default function Menu () {
                 </span>
               </div>
               <div
-                className={`mb-3.5 mt-1 text-[13px] ${
+                className={`mb-3.5 mt-1 break-all whitespace-pre-wrap text-[13px] ${
                   item.active ? 'text-[#5C5847]' : 'text-[#B3AC98]'
                 }`}
               >
@@ -424,11 +441,11 @@ export default function Menu () {
                         Upload en cours...
                       </span>
                     </>
-                  ) : formData.imageFile || formData.existingImageUrl ? (
+                  ) : (formData.imageFile && imagePreviewUrl) || formData.existingImageUrl ? (
                     <>
                       <img
-                        src={formData.imageFile 
-                          ? URL.createObjectURL(formData.imageFile)
+                        src={formData.imageFile
+                          ? imagePreviewUrl
                           : resolveMediaUrl(formData.existingImageUrl)
                         }
                         alt='Aperçu'

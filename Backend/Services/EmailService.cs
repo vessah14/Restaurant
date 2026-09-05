@@ -1,18 +1,14 @@
 using Backend.Interfaces;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 
 namespace Backend.Services
 {
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _config;
-        private readonly HttpClient _httpClient;
 
-        public EmailService(IConfiguration config, IHttpClientFactory httpClientFactory)
+        public EmailService(IConfiguration config)
         {
             _config = config;
-            _httpClient = httpClientFactory.CreateClient("SendGrid");
         }
 
         public async Task EnvoyerEmailResetMotDePasseAsync(string emailDestinataire, string prenom, string lienReset)
@@ -36,34 +32,17 @@ namespace Backend.Services
                 "Cordialement,\nLes Deux Colombes");
         }
 
-        private async Task EnvoyerAsync(string emailDestinataire, string sujet, string contenu)
+        private Task EnvoyerAsync(string emailDestinataire, string sujet, string contenu)
         {
-            var apiKey = _config["SendGrid:ApiKey"];
-            var emailExpediteur = _config["SendGrid:From"];
-            var nomExpediteur = _config["SendGrid:FromName"] ?? "Les Deux Colombes";
+            var emailProviderConfigured = !string.IsNullOrWhiteSpace(_config["Email:Provider"]) ||
+                !string.IsNullOrWhiteSpace(_config["Smtp:Host"]);
 
-            if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(emailExpediteur))
-                throw new InvalidOperationException("La configuration SendGrid est incomplète.");
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, "mail/send");
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-            request.Content = JsonContent.Create(new
+            if (!emailProviderConfigured)
             {
-                personalizations = new[]
-                {
-                    new { to = new[] { new { email = emailDestinataire } } }
-                },
-                from = new { email = emailExpediteur, name = nomExpediteur },
-                subject = sujet,
-                content = new[] { new { type = "text/plain", value = contenu } }
-            });
-
-            using var response = await _httpClient.SendAsync(request);
-            if (!response.IsSuccessStatusCode)
-            {
-                var details = await response.Content.ReadAsStringAsync();
-                throw new InvalidOperationException($"SendGrid a refusé l'envoi : {details}");
+                return Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
     }
 }
