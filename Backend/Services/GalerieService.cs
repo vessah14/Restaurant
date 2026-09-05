@@ -12,10 +12,12 @@ namespace Backend.Services
             { "interieur", "plats", "ambiance", "details", "evenements" };
 
         private readonly RestaurantDbContext _context;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public GalerieService(RestaurantDbContext context)
+        public GalerieService(RestaurantDbContext context, ICloudinaryService cloudinaryService)
         {
             _context = context;
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<IEnumerable<GalerieDto>> GetAllAsync(string langue, string? categorie = null)
@@ -48,9 +50,15 @@ namespace Backend.Services
             if (!CategoriesValides.Contains(dto.Categorie))
                 throw new InvalidOperationException("Catégorie invalide.");
 
+            if (dto.ImageFile is null)
+                throw new InvalidOperationException("Fichier image requis.");
+
+            var (url, publicId) = await _cloudinaryService.UploadImageAsync(dto.ImageFile, "galerie");
+
             var image = new Galerie
             {
-                ImageUrl = dto.ImageUrl,
+                ImageUrl = url,
+                ImagePublicId = publicId,
                 Categorie = dto.Categorie,
                 OrdreAffichage = dto.OrdreAffichage,
                 DateAjout = DateTime.UtcNow,
@@ -78,6 +86,11 @@ namespace Backend.Services
         {
             var image = await _context.Galeries.FindAsync(id);
             if (image is null) return false;
+
+            if (!string.IsNullOrEmpty(image.ImagePublicId))
+            {
+                await _cloudinaryService.SupprimerImageAsync(image.ImagePublicId);
+            }
 
             _context.Galeries.Remove(image);
             await _context.SaveChangesAsync();

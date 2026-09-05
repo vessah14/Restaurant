@@ -31,12 +31,13 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<ActionResult<GalerieDto>> Ajouter(AjouterImageGalerieDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<GalerieDto>> Ajouter([FromForm] AjouterImageGalerieDto dto)
         {
             try
             {
                 var image = await _galerieService.AjouterAsync(dto);
-                return CreatedAtAction(nameof(GetAll), image);
+                return CreatedAtAction(nameof(GetAll), new { id = image.Id }, image);
             }
             catch (InvalidOperationException ex)
             {

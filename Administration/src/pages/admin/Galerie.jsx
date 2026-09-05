@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Plus, Star, Trash2, X, Upload, ImagePlus } from 'lucide-react'
-import { galerieApi, uploadsApi } from '../../api'
+import { galerieApi } from '../../api'
 import { resolveMediaUrl } from '../../api/client'
 
 const filters = ['Toutes', 'Restaurant', 'Plats', 'Ambiance', 'Événements']
@@ -23,7 +23,7 @@ export default function Galerie () {
   const [formData, setFormData] = useState({
     titre: '',
     categorie: 'interieur',
-    imageUrl: ''
+    imageFile: null
   })
 
   useEffect(() => {
@@ -57,23 +57,13 @@ export default function Galerie () {
     }
   }
 
-  const handleFileUpload = async e => {
+  const handleFileUpload = e => {
     const fichier = e.target.files?.[0]
     if (!fichier) return
 
-    setUploading(true)
+    setFormData(prev => ({ ...prev, imageFile: fichier }))
     setUploadError(null)
-
-    try {
-      const resultat = await uploadsApi.uploaderImage(fichier)
-      setFormData(prev => ({ ...prev, imageUrl: resultat.imageUrl }))
-    } catch (error) {
-      setUploadError(error.message || "Erreur lors de l'upload de l'image")
-      console.error("Erreur lors de l'upload de l'image", error)
-    } finally {
-      setUploading(false)
-      e.target.value = ''
-    }
+    e.target.value = ''
   }
 
   const handleInputChange = e => {
@@ -91,29 +81,36 @@ export default function Galerie () {
     setFormData({
       titre: '',
       categorie: 'interieur',
-      imageUrl: ''
+      imageFile: null
     })
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
-    if (!formData.imageUrl) {
+    if (!formData.imageFile) {
       setUploadError('Veuillez uploader une image.')
       return
     }
 
+    setUploading(true)
+    setUploadError(null)
+
     try {
-      await galerieApi.creer({
-        imageUrl: formData.imageUrl,
-        categorie: formData.categorie,
-        ordreAffichage: images.length,
-        titreFr: formData.titre,
-        titreEn: formData.titre
-      })
+      const formDataToSend = new FormData()
+      formDataToSend.append('imageFile', formData.imageFile)
+      formDataToSend.append('categorie', formData.categorie)
+      formDataToSend.append('ordreAffichage', images.length)
+      formDataToSend.append('titreFr', formData.titre)
+      formDataToSend.append('titreEn', formData.titre)
+
+      await galerieApi.creer(formDataToSend)
       await chargerImages()
       closeModal()
     } catch (error) {
       console.error("Erreur lors de l'ajout de l'image", error)
+      setUploadError(error.message || "Erreur lors de l'ajout de l'image")
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -291,10 +288,10 @@ export default function Galerie () {
                         Upload en cours...
                       </span>
                     </>
-                  ) : formData.imageUrl ? (
+                  ) : formData.imageFile ? (
                     <>
                       <img
-                        src={resolveMediaUrl(formData.imageUrl)}
+                        src={URL.createObjectURL(formData.imageFile)}
                         alt='Aperçu'
                         className='max-h-28 rounded-lg object-cover'
                       />

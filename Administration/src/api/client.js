@@ -147,6 +147,14 @@ class ApiClient {
   upload(endpoint, formData) {
     return this.request('POST', endpoint, formData, true)
   }
+
+  postFormData(endpoint, formData) {
+    return this.request('POST', endpoint, formData, true)
+  }
+
+  putFormData(endpoint, formData) {
+    return this.request('PUT', endpoint, formData, true)
+  }
 }
 
 export const api = new ApiClient()

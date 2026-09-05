@@ -35,6 +35,12 @@ builder.Services.AddHttpClient("SendGrid", client =>
 
 builder.Services.AddHttpClient("DeepL");
 
+// --- Cloudinary ---
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddSingleton<ICloudinaryService, CloudinaryService>();
+
+// --- Services métier ---
 builder.Services.AddScoped<IUtilisateurService, UtilisateurService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAvisService, AvisService>();
@@ -85,7 +91,7 @@ builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("LoginPolicy", opt =>
     {
-        opt.PermitLimit = 5;               // 5 tentatives max
+        opt.PermitLimit = 5;                  // 5 tentatives max
         opt.Window = TimeSpan.FromMinutes(1); // par minute
         opt.QueueLimit = 0;
     });

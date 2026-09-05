@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Backend.Dtos.Menu
 {
     public class ModifierPlatDto
     {
         public decimal? Prix { get; set; }
-        public string? ImageUrl { get; set; }
+        public IFormFile? ImageFile { get; set; }
         public bool Disponible { get; set; }
         public int OrdreAffichage { get; set; }
 

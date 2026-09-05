@@ -28,7 +28,7 @@ namespace Backend.Services
         public async Task<LoginResponseDto?> ConnexionAsync(LoginDto dto)
         {
             var utilisateur = await _context.Utilisateurs
-                .FirstOrDefaultAsync(u => u.Email == dto.Email && u.Actif);
+                .FirstOrDefaultAsync(u => u.Nom == dto.Nom && u.Actif);
 
             if (utilisateur is null)
                 return null;

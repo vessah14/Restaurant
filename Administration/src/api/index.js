@@ -26,9 +26,9 @@ export const utilisateursApi = {
 }
 
 export const authApi = {
-  login: (email, motDePasse) =>
+  login: (nom, motDePasse) =>
     api.post('/api/Auth/login', {
-      email,
+      nom,
       motDePasse
     }),
 
@@ -92,11 +92,21 @@ export const platsApi = {
   // Récupérer un plat par ID
   getById: (id) => api.get(`/api/Plats/${id}`),
 
-  // Créer un plat
-  creer: (donnees) => api.post("/api/Plats", donnees),
+  // Créer un plat (avec FormData pour l'image)
+  creer: (donnees) => {
+    if (donnees instanceof FormData) {
+      return api.postFormData("/api/Plats", donnees)
+    }
+    return api.post("/api/Plats", donnees)
+  },
 
-  // Modifier un plat
-  modifier: (id, donnees) => api.put(`/api/Plats/${id}`, donnees),
+  // Modifier un plat (avec FormData pour l'image)
+  modifier: (id, donnees) => {
+    if (donnees instanceof FormData) {
+      return api.putFormData(`/api/Plats/${id}`, donnees)
+    }
+    return api.put(`/api/Plats/${id}`, donnees)
+  },
 
   // Supprimer un plat
   supprimer: (id) => api.delete(`/api/Plats/${id}`),
@@ -126,8 +136,13 @@ export const galerieApi = {
   // Récupérer toutes les images
   getAll: () => api.get("/api/Galerie"),
 
-  // Créer une image
-  creer: (donnees) => api.post("/api/Galerie", donnees),
+  // Créer une image (avec FormData pour l'image)
+  creer: (donnees) => {
+    if (donnees instanceof FormData) {
+      return api.postFormData("/api/Galerie", donnees)
+    }
+    return api.post("/api/Galerie", donnees)
+  },
 
   // Supprimer une image
   supprimer: (id) => api.delete(`/api/Galerie/${id}`),

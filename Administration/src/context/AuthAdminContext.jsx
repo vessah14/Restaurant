@@ -49,12 +49,14 @@ export const AuthAdminProvider = ({ children }) => {
     }
   }
 
-  const connecter = async (email, motDePasse) => {
+  const connecter = async (nom, motDePasse) => {
     try {
       setChargement(true)
       setErreur(null)
 
-      const response = await authApi.login(email, motDePasse)
+      console.log('Tentative de connexion avec:', nom)
+      const response = await authApi.login(nom, motDePasse)
+      console.log('Réponse de l\'API:', response)
 
       if (response.token && response.utilisateur) {
         // Vérifier que l'utilisateur est admin
@@ -68,12 +70,14 @@ export const AuthAdminProvider = ({ children }) => {
         localStorage.setItem('adminToken', response.token)
         setUtilisateur(response.utilisateur)
         setEstConnecte(true)
+        console.log('Connexion réussie, estConnecte:', true)
 
         return true
       }
 
       throw new Error('Erreur lors de la connexion')
     } catch (error) {
+      console.error('Erreur de connexion:', error)
       setErreur(error.message)
       setEstConnecte(false)
       return false

@@ -1,10 +1,8 @@
-using Backend.Dtos.Auth;
-
 namespace Backend.Dtos.Auth
 {
     public class LoginDto
     {
-        public string Email { get; set; } = string.Empty;
+        public string Nom { get; set; } = string.Empty;
         public string MotDePasse { get; set; } = string.Empty;
     }
 

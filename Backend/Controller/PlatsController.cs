@@ -44,7 +44,8 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<ActionResult<PlatDto>> Creer(CreerPlatDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<PlatDto>> Creer([FromForm] CreerPlatDto dto)
         {
             try
             {
@@ -59,7 +60,8 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult<PlatDto>> Modifier(long id, ModifierPlatDto dto)
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<PlatDto>> Modifier(long id, [FromForm] ModifierPlatDto dto)
         {
             var plat = await _platService.ModifierAsync(id, dto);
             return plat is null ? NotFound() : Ok(plat);

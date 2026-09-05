@@ -10,6 +10,8 @@ namespace Backend.Models
 
         public string? ImageUrl { get; set; }
 
+        public string? ImagePublicId { get; set; }
+
         public bool Disponible { get; set; } = true;
 
         public int OrdreAffichage { get; set; }

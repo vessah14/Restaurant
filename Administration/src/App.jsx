@@ -6,6 +6,8 @@ import { useAuthAdmin } from './context/AuthAdminContext'
 function App () {
   const { estConnecte, chargement } = useAuthAdmin()
 
+  console.log('App render - estConnecte:', estConnecte, 'chargement:', chargement)
+
   if (chargement) {
     return (
       <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-amber-50 to-orange-100'>
@@ -19,6 +21,7 @@ function App () {
     )
   }
 
+  console.log('App render - Affichage:', estConnecte ? 'Container' : 'Connexion')
   return <>{estConnecte ? <Container /> : <Connexion />}</>
 }
 

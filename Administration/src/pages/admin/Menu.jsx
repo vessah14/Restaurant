@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { X, Plus, Upload, ImagePlus } from 'lucide-react'
-import { platsApi, uploadsApi } from '../../api'
+import { platsApi } from '../../api'
 import { resolveMediaUrl } from '../../api/client'
 
 const categories = [
@@ -28,7 +28,8 @@ export default function Menu () {
     nom: '',
     description: '',
     prix: '',
-    imageUrl: '',
+    imageFile: null,
+    existingImageUrl: '',
     categorie: 'plats'
   })
 
@@ -53,16 +54,16 @@ export default function Menu () {
       const plat = allItems.find(p => p.id === id)
       if (!plat) return
 
-      await platsApi.modifier(id, {
-        prix: plat.prix,
-        imageUrl: plat.imageUrl,
-        disponible: !currentStatus,
-        ordreAffichage: plat.ordreAffichage,
-        nomFr: plat.nom,
-        descriptionFr: plat.description || '',
-        nomEn: plat.nom,
-        descriptionEn: plat.description || ''
-      })
+      const formDataToSend = new FormData()
+      formDataToSend.append('prix', plat.prix || '0')
+      formDataToSend.append('disponible', !currentStatus)
+      formDataToSend.append('ordreAffichage', plat.ordreAffichage)
+      formDataToSend.append('nomFr', plat.nom)
+      formDataToSend.append('descriptionFr', plat.description || '')
+      formDataToSend.append('nomEn', plat.nom)
+      formDataToSend.append('descriptionEn', plat.description || '')
+
+      await platsApi.modifier(id, formDataToSend)
       await chargerPlats()
     } catch (error) {
       console.error('Erreur lors de la modification du plat', error)
@@ -71,23 +72,13 @@ export default function Menu () {
     }
   }
 
-  const handleFileUpload = async e => {
+  const handleFileUpload = e => {
     const fichier = e.target.files?.[0]
     if (!fichier) return
 
-    setUploading(true)
+    setFormData(prev => ({ ...prev, imageFile: fichier }))
     setUploadError(null)
-
-    try {
-      const resultat = await uploadsApi.uploaderImage(fichier)
-      setFormData(prev => ({ ...prev, imageUrl: resultat.imageUrl }))
-    } catch (error) {
-      setUploadError(error.message || "Erreur lors de l'upload de l'image")
-      console.error("Erreur lors de l'upload de l'image", error)
-    } finally {
-      setUploading(false)
-      e.target.value = ''
-    }
+    e.target.value = ''
   }
 
   const handleInputChange = e => {
@@ -98,6 +89,7 @@ export default function Menu () {
   const handleSubmit = async e => {
     e.preventDefault()
     setUploadError(null)
+    setUploading(true)
 
     try {
       const categorieId =
@@ -109,25 +101,28 @@ export default function Menu () {
           ? 3
           : 4
 
-      const donnees = {
-        prix: parseFloat(formData.prix) || 0,
-        imageUrl: formData.imageUrl || null,
-        ordreAffichage: editingId
-          ? allItems.find(item => item.id === editingId)?.ordreAffichage || 0
-          : allItems.length + 1,
-        nomFr: formData.nom,
-        descriptionFr: formData.description,
-        nomEn: formData.nom,
-        descriptionEn: formData.description,
-        disponible: editingId
-          ? allItems.find(item => item.id === editingId)?.disponible ?? true
-          : true
+      const formDataToSend = new FormData()
+      formDataToSend.append('categorieId', categorieId)
+      formDataToSend.append('prix', formData.prix || '0')
+      formDataToSend.append('ordreAffichage', editingId
+        ? allItems.find(item => item.id === editingId)?.ordreAffichage || 0
+        : allItems.length + 1)
+      formDataToSend.append('nomFr', formData.nom)
+      formDataToSend.append('descriptionFr', formData.description || '')
+      formDataToSend.append('nomEn', formData.nom)
+      formDataToSend.append('descriptionEn', formData.description || '')
+      formDataToSend.append('disponible', editingId
+        ? allItems.find(item => item.id === editingId)?.disponible ?? true
+        : true)
+
+      if (formData.imageFile) {
+        formDataToSend.append('imageFile', formData.imageFile)
       }
 
       if (editingId) {
-        await platsApi.modifier(editingId, donnees)
+        await platsApi.modifier(editingId, formDataToSend)
       } else {
-        await platsApi.creer({ categorieId, ...donnees })
+        await platsApi.creer(formDataToSend)
       }
       await chargerPlats()
       setShowModal(false)
@@ -136,17 +131,19 @@ export default function Menu () {
         nom: '',
         description: '',
         prix: '',
-        imageUrl: '',
+        imageFile: null,
         categorie: 'plats'
       })
     } catch (error) {
-      console.error('Erreur lors de l’enregistrement du plat', error)
+      console.error("Erreur lors de l'enregistrement du plat", error)
       setUploadError(
         error?.message ||
           (editingId
             ? 'Impossible de modifier le plat.'
             : "Impossible d'ajouter le plat.")
       )
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -164,7 +161,8 @@ export default function Menu () {
       nom: plat.nom || '',
       description: plat.description || '',
       prix: plat.prix ?? '',
-      imageUrl: plat.imageUrl || '',
+      imageFile: null,
+      existingImageUrl: plat.imageUrl || '',
       categorie: plat.categorieCode || 'plats'
     })
     setUploadError(null)
@@ -179,7 +177,8 @@ export default function Menu () {
       nom: '',
       description: '',
       prix: '',
-      imageUrl: '',
+      imageFile: null,
+      existingImageUrl: '',
       categorie: 'plats'
     })
   }
@@ -425,10 +424,13 @@ export default function Menu () {
                         Upload en cours...
                       </span>
                     </>
-                  ) : formData.imageUrl ? (
+                  ) : formData.imageFile || formData.existingImageUrl ? (
                     <>
                       <img
-                        src={resolveMediaUrl(formData.imageUrl)}
+                        src={formData.imageFile 
+                          ? URL.createObjectURL(formData.imageFile)
+                          : resolveMediaUrl(formData.existingImageUrl)
+                        }
                         alt='Aperçu'
                         className='max-h-28 rounded-lg object-cover'
                       />

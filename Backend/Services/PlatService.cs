@@ -9,10 +9,12 @@ namespace Backend.Services
     public class PlatService : IPlatService
     {
         private readonly RestaurantDbContext _context;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public PlatService(RestaurantDbContext context)
+        public PlatService(RestaurantDbContext context, ICloudinaryService cloudinaryService)
         {
             _context = context;
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<IEnumerable<CategorieMenuDto>> GetCarteAsync(string langue)
@@ -72,11 +74,22 @@ namespace Backend.Services
             if (!categorieExiste)
                 throw new InvalidOperationException("La catégorie du plat est introuvable.");
 
+            string? imageUrl = null;
+            string? imagePublicId = null;
+
+            if (dto.ImageFile is not null)
+            {
+                var (url, publicId) = await _cloudinaryService.UploadImageAsync(dto.ImageFile, "plats");
+                imageUrl = url;
+                imagePublicId = publicId;
+            }
+
             var plat = new Plat
             {
                 CategorieId = dto.CategorieId,
                 Prix = dto.Prix,
-                ImageUrl = dto.ImageUrl,
+                ImageUrl = imageUrl,
+                ImagePublicId = imagePublicId,
                 Disponible = true,
                 OrdreAffichage = dto.OrdreAffichage,
                 DateCreation = DateTime.UtcNow,
@@ -112,8 +125,19 @@ namespace Backend.Services
 
             if (plat is null) return null;
 
+            if (dto.ImageFile is not null)
+            {
+                if (!string.IsNullOrEmpty(plat.ImagePublicId))
+                {
+                    await _cloudinaryService.SupprimerImageAsync(plat.ImagePublicId);
+                }
+
+                var (url, publicId) = await _cloudinaryService.UploadImageAsync(dto.ImageFile, "plats");
+                plat.ImageUrl = url;
+                plat.ImagePublicId = publicId;
+            }
+
             plat.Prix = dto.Prix;
-            plat.ImageUrl = dto.ImageUrl;
             plat.Disponible = dto.Disponible;
             plat.OrdreAffichage = dto.OrdreAffichage;
             plat.DateMaj = DateTime.UtcNow;
@@ -151,6 +175,11 @@ namespace Backend.Services
         {
             var plat = await _context.Plats.FindAsync(id);
             if (plat is null) return false;
+
+            if (!string.IsNullOrEmpty(plat.ImagePublicId))
+            {
+                await _cloudinaryService.SupprimerImageAsync(plat.ImagePublicId);
+            }
 
             _context.Plats.Remove(plat);
             await _context.SaveChangesAsync();
