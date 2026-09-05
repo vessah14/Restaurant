@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-ARG VITE_API_URL=/api
+ARG VITE_API_URL=https://restaurant-sxxt.onrender.com
 ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 

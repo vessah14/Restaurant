@@ -11,13 +11,13 @@ Les ports sont modifiables avec `API_PORT`, `PUBLIC_PORT` et `ADMIN_PORT`. En pr
 
 Les migrations Entity Framework sont appliquees au demarrage de l'API lorsque `Database__ApplyMigrations=true` dans `docker-compose.yml`. Sauvegardez la base avant chaque mise a jour.
 
-## Deploiement Railway
+## Deploiement de l'API sur Render
 
-Railway doit contenir trois services applicatifs distincts : `Backend`, `PublicSite` et `Administration`. Le service MySQL Railway doit etre lie au service `Backend`.
+Le service web Render de l'API utilise le dossier `Backend` et son `Dockerfile`. Configurez le health check sur `/healthz` et utilisez le port `8080` expose par le conteneur.
 
-Dans le service `Backend`, ajoutez ces variables Railway :
+Dans le service `Backend`, ajoutez ces variables Render :
 
-- `ConnectionStrings__DefaultConnection` : utilisez la reference MySQL Railway, par exemple `Server=${{MySQL.MYSQLHOST}};Port=${{MySQL.MYSQLPORT}};Database=${{MySQL.MYSQLDATABASE}};User=${{MySQL.MYSQLUSER}};Password=${{MySQL.MYSQLPASSWORD}};`
+- `ConnectionStrings__DefaultConnection`
 - `Jwt__Key`, `Jwt__Issuer`, `Jwt__Audience`
 - `Cloudinary__CloudName`, `Cloudinary__ApiKey`, `Cloudinary__ApiSecret`
 - `DeepL__ApiKey`
@@ -27,18 +27,18 @@ Dans le service `Backend`, ajoutez ces variables Railway :
 - `Database__ApplyMigrations=true`
 - `ASPNETCORE_URLS=http://+:8080`
 
-Dans le service `PublicSite`, ajoutez `VITE_API_URL=https://url-publique-du-backend.up.railway.app` et `VITE_ADMIN_URL=https://url-publique-de-l-administration.up.railway.app` comme variables de build. Dans `Administration`, ajoutez `VITE_API_URL=https://url-publique-du-backend.up.railway.app` comme variable de build.
+L'API actuellement deployee est disponible sur `https://restaurant-sxxt.onrender.com`. Les builds de `PublicSite` et `Administration` utilisent cette URL via leurs fichiers `.env.production`. Si vous configurez les variables directement dans Render, utilisez `VITE_API_URL=https://restaurant-sxxt.onrender.com` comme variable de build pour les deux frontends.
 
 Chaque service frontend doit utiliser son dossier comme racine (`PublicSite` ou `Administration`) et son Dockerfile respectif. Apres chaque modification d'une variable `VITE_*`, redeployez le service frontend car ces valeurs sont injectees au build.
 
-Le mot de passe Railway qui etait present dans `Backend/appsettings.json` a ete retire du code. Comme il a ete expose dans le depot, regenerez-le dans Railway avant le deploiement.
+Les secrets doivent rester dans les variables d'environnement Render et ne doivent pas etre ajoutes a `Backend/appsettings.json`.
 
-## Deploiement separe Railway + Vercel/Netlify
+## Deploiement separe Render + Vercel/Netlify
 
-Le backend peut etre deploye seul sur Railway, puis chaque frontend sur Vercel ou Netlify. Pour `PublicSite` et `Administration`, utilisez le dossier du projet comme racine, la commande `npm run build` et le dossier de sortie `dist`.
+Le backend peut etre deploye seul sur Render, puis chaque frontend sur Vercel ou Netlify. Pour `PublicSite` et `Administration`, utilisez le dossier du projet comme racine, la commande `npm run build` et le dossier de sortie `dist`.
 
-Variables de build du site public : `VITE_API_URL=https://url-publique-du-backend` et `VITE_ADMIN_URL=https://url-publique-de-l-administration`.
+Variable de build du site public : `VITE_API_URL=https://restaurant-sxxt.onrender.com` et `VITE_ADMIN_URL=https://url-publique-de-l-administration`.
 
-Variable de build de l'administration : `VITE_API_URL=https://url-publique-du-backend`.
+Variable de build de l'administration : `VITE_API_URL=https://restaurant-sxxt.onrender.com`.
 
-Apres avoir obtenu les URLs Vercel ou Netlify, reportez-les dans Railway avec `FrontendUrl`, `Cors__AllowedOrigins__0` et `Cors__AllowedOrigins__1`, puis redeployez le backend. Les fichiers `vercel.json` et `netlify.toml` de chaque frontend assurent le fallback des routes React.
+Apres avoir obtenu les URLs Vercel ou Netlify, reportez-les dans Render avec `FrontendUrl`, `Cors__AllowedOrigins__0` et `Cors__AllowedOrigins__1`, puis redeployez le backend. Les fichiers `vercel.json` et `netlify.toml` de chaque frontend assurent le fallback des routes React.
