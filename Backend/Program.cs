@@ -133,6 +133,12 @@ else
     app.UseExceptionHandler(errorApp =>
         errorApp.Run(async context =>
         {
+            var exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+            if (exception is not null)
+            {
+                app.Logger.LogError(exception, "Unhandled production request error for {Path}", context.Request.Path);
+            }
+
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await context.Response.WriteAsJsonAsync(new
             {
