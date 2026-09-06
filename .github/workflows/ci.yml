@@ -51,4 +51,16 @@ jobs:
         env:
           VITE_API_URL: https://restaurant-sxxt.onrender.com
           VITE_SITE_URL: https://lesdeuxcolombes.fr
+          VITE_BASE_PATH: /
         run: npm run build
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate Compose configuration
+        run: docker compose --env-file .env.example config
+      - name: Build application images
+        run: docker compose --env-file .env.example build

@@ -33,6 +33,16 @@ Chaque service frontend doit utiliser son dossier comme racine (`PublicSite` ou 
 
 Les secrets doivent rester dans les variables d'environnement Render et ne doivent pas etre ajoutes a `Backend/appsettings.json`.
 
+## Publication sur GitHub
+
+Le depot contient une CI GitHub Actions qui verifie les builds .NET, les deux frontends et les images Docker a chaque push ou pull request.
+
+Le workflow `pages.yml` publie automatiquement les deux frontends sur GitHub Pages apres chaque push sur `main`. Activez GitHub Pages dans `Settings > Pages` en choisissant `GitHub Actions`. Le site public sera disponible sur `https://vessah14.github.io/Restaurant/` et l'administration sur `https://vessah14.github.io/Restaurant/admin/`.
+
+Le backend et MySQL ne peuvent pas etre executes par GitHub Pages. Deployez l'API sur Render (ou un autre hebergeur Docker), puis definissez les variables de depot `VITE_API_URL`, `VITE_SITE_URL` et `VITE_ADMIN_URL` dans `Settings > Secrets and variables > Actions > Variables` avant le prochain deploiement.
+
+Ne commitez jamais `.env`; utilisez uniquement `.env.example` comme modele et les variables GitHub/Render pour les valeurs sensibles.
+
 ## Deploiement separe Render + Vercel/Netlify
 
 Le backend peut etre deploye seul sur Render, puis chaque frontend sur Vercel ou Netlify. Pour `PublicSite` et `Administration`, utilisez le dossier du projet comme racine, la commande `npm run build` et le dossier de sortie `dist`.

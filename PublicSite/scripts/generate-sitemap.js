@@ -2,6 +2,7 @@
 import fs from "fs";
 
 const SITE_URL = process.env.VITE_SITE_URL || "http://localhost:5174";
+const BASE_PATH = (process.env.VITE_BASE_PATH || "/").replace(/\/$/, "");
 
 // Liste des pages publiques du site
 // Les pages "connexion" et "inscription" ne sont PAS listées ici (aucun intérêt SEO)
@@ -58,7 +59,7 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>
 ${pages
   .map(
     (p) => `  <url>
-    <loc>${SITE_URL}${p.loc}</loc>
+    <loc>${SITE_URL}${BASE_PATH}${p.loc}</loc>
     <lastmod>${p.lastmod}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>
@@ -84,7 +85,7 @@ Disallow: /Connexion
 Disallow: /Inscription
 
 # Sitemap location
-Sitemap: ${SITE_URL}/sitemap.xml
+Sitemap: ${SITE_URL}${BASE_PATH}/sitemap.xml
 
 # Crawl delay (optional - adjust as needed)
 Crawl-delay: 1

@@ -100,7 +100,7 @@ export default function ReinitialiserMotDePasse () {
           message='Votre mot de passe a été réinitialisé. Vous pouvez maintenant vous connecter.'
           confirmLabel='Se connecter'
           onClose={() => {
-            window.location.href = '/Connexion'
+            window.location.href = `${import.meta.env.BASE_URL}Connexion`
           }}
         />
       )}
