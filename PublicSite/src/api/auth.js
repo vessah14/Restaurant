@@ -1,8 +1,8 @@
 import { api } from "./client";
 
 export const authApi = {
-  login: (email, motDePasse) =>
-    api.post("/api/Auth/login", { email, motDePasse }),
+  login: (identifiant, motDePasse) =>
+    api.post("/api/Auth/login", { nom: identifiant, motDePasse }),
 
   inscription: (donnees) =>
     api.post("/api/Auth/inscription", donnees),

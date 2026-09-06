@@ -130,7 +130,15 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/error"); // message générique en prod
+    app.UseExceptionHandler(errorApp =>
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                message = "Une erreur interne est survenue."
+            });
+        }));
     app.UseHsts();
 }
 

@@ -14,17 +14,25 @@ namespace Backend.Services
 
     public class CloudinaryService : ICloudinaryService
     {
-        private readonly Cloudinary _cloudinary;
+        private readonly Cloudinary? _cloudinary;
 
         public CloudinaryService(IOptions<CloudinarySettings> config)
         {
             var settings = config.Value;
-            var account = new Account(settings.CloudName, settings.ApiKey, settings.ApiSecret);
-            _cloudinary = new Cloudinary(account);
+            if (!string.IsNullOrWhiteSpace(settings.CloudName) &&
+                !string.IsNullOrWhiteSpace(settings.ApiKey) &&
+                !string.IsNullOrWhiteSpace(settings.ApiSecret))
+            {
+                var account = new Account(settings.CloudName, settings.ApiKey, settings.ApiSecret);
+                _cloudinary = new Cloudinary(account);
+            }
         }
 
         public async Task<(string Url, string PublicId)> UploadImageAsync(IFormFile file, string dossier = "galerie")
         {
+            if (_cloudinary is null)
+                throw new InvalidOperationException("Cloudinary n'est pas configure.");
+
             if (file is null || file.Length == 0)
                 throw new InvalidOperationException("Fichier image invalide.");
 
@@ -48,6 +56,8 @@ namespace Backend.Services
         public async Task<bool> SupprimerImageAsync(string publicId)
         {
             if (string.IsNullOrEmpty(publicId)) return false;
+            if (_cloudinary is null)
+                throw new InvalidOperationException("Cloudinary n'est pas configure.");
 
             var deleteParams = new DeletionParams(publicId);
             var result = await _cloudinary.DestroyAsync(deleteParams);
