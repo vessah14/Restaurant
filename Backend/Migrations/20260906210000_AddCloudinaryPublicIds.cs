@@ -9,21 +9,37 @@ namespace Backend.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "ImagePublicId",
-                table: "Plats",
-                type: "varchar(255)",
-                maxLength: 255,
-                nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+            migrationBuilder.Sql("""
+                SET @sql = IF(
+                    EXISTS (
+                        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_SCHEMA = DATABASE()
+                          AND TABLE_NAME = 'Plats'
+                          AND COLUMN_NAME = 'ImagePublicId'
+                    ),
+                    'SELECT 1',
+                    'ALTER TABLE `Plats` ADD COLUMN `ImagePublicId` varchar(255) NULL'
+                );
+                PREPARE add_plats_image_public_id FROM @sql;
+                EXECUTE add_plats_image_public_id;
+                DEALLOCATE PREPARE add_plats_image_public_id;
+                """);
 
-            migrationBuilder.AddColumn<string>(
-                name: "ImagePublicId",
-                table: "Galeries",
-                type: "varchar(255)",
-                maxLength: 255,
-                nullable: true)
-                .Annotation("MySql:CharSet", "utf8mb4");
+            migrationBuilder.Sql("""
+                SET @sql = IF(
+                    EXISTS (
+                        SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+                        WHERE TABLE_SCHEMA = DATABASE()
+                          AND TABLE_NAME = 'Galeries'
+                          AND COLUMN_NAME = 'ImagePublicId'
+                    ),
+                    'SELECT 1',
+                    'ALTER TABLE `Galeries` ADD COLUMN `ImagePublicId` varchar(255) NULL'
+                );
+                PREPARE add_galeries_image_public_id FROM @sql;
+                EXECUTE add_galeries_image_public_id;
+                DEALLOCATE PREPARE add_galeries_image_public_id;
+                """);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
