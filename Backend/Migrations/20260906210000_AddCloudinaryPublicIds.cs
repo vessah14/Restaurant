@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Migrations
 {
+    [Migration("20260906210000_AddCloudinaryPublicIds")]
     public partial class AddCloudinaryPublicIds : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,13 +28,8 @@ namespace Backend.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ImagePublicId",
-                table: "Plats");
-
-            migrationBuilder.DropColumn(
-                name: "ImagePublicId",
-                table: "Galeries");
+            migrationBuilder.DropColumn(name: "ImagePublicId", table: "Plats");
+            migrationBuilder.DropColumn(name: "ImagePublicId", table: "Galeries");
         }
     }
 }
