@@ -162,6 +162,11 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
     await db.Database.MigrateAsync();
+
+    await db.Database.ExecuteSqlRawAsync(
+        "ALTER TABLE `Plats` ADD COLUMN IF NOT EXISTS `ImagePublicId` varchar(255) NULL");
+    await db.Database.ExecuteSqlRawAsync(
+        "ALTER TABLE `Galeries` ADD COLUMN IF NOT EXISTS `ImagePublicId` varchar(255) NULL");
 }
 
 app.Run();
