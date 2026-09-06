@@ -52,7 +52,7 @@ services:
     build:
       context: ./PublicSite
       args:
-        VITE_API_URL: ${VITE_API_URL:-/api}
+        VITE_API_URL: ${VITE_API_URL:-https://restaurant-sxxt.onrender.com}
         VITE_SITE_URL: ${PUBLIC_ORIGIN}
         VITE_ADMIN_URL: ${ADMIN_ORIGIN:-http://localhost:8082}
     restart: unless-stopped
@@ -65,7 +65,7 @@ services:
     build:
       context: ./Administration
       args:
-        VITE_API_URL: ${VITE_ADMIN_API_URL:-/api}
+        VITE_API_URL: ${VITE_ADMIN_API_URL:-https://restaurant-sxxt.onrender.com}
     restart: unless-stopped
     depends_on:
       - api

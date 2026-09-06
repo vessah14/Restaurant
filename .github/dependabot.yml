@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /Administration
+    schedule:
+      interval: monthly
+  - package-ecosystem: npm
+    directory: /PublicSite
+    schedule:
+      interval: monthly
+  - package-ecosystem: nuget
+    directory: /Backend
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /Backend
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /Administration
+    schedule:
+      interval: monthly
+  - package-ecosystem: docker
+    directory: /PublicSite
+    schedule:
+      interval: monthly

@@ -1,0 +1,78 @@
+name: Deploy frontends to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            PublicSite/package-lock.json
+            Administration/package-lock.json
+
+      - name: Install public site dependencies
+        working-directory: PublicSite
+        run: npm ci
+
+      - name: Build public site
+        working-directory: PublicSite
+        env:
+          VITE_API_URL: https://restaurant-sxxt.onrender.com
+          VITE_SITE_URL: https://lesdeuxcolombes.fr
+          VITE_ADMIN_URL: /admin/
+          VITE_BASE_PATH: /
+        run: npm run build
+
+      - name: Install administration dependencies
+        working-directory: Administration
+        run: npm ci
+
+      - name: Build administration
+        working-directory: Administration
+        env:
+          VITE_API_URL: https://restaurant-sxxt.onrender.com
+          VITE_BASE_PATH: /admin/
+        run: npm run build
+
+      - name: Assemble Pages artifact
+        shell: bash
+        run: |
+          mkdir -p PublicSite/dist/admin
+          cp -R Administration/dist/. PublicSite/dist/admin/
+          touch PublicSite/dist/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: PublicSite/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

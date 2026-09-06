@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ARG VITE_API_URL=https://restaurant-sxxt.onrender.com
-ARG VITE_SITE_URL=https://www.example.com
+ARG VITE_SITE_URL=
 ARG VITE_ADMIN_URL=
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_SITE_URL=$VITE_SITE_URL

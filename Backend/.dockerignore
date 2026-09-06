@@ -1,4 +1,15 @@
 bin/
 obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.Development.json
+*.Production.json
+*.env
+*.pfx
+*.pem
+*.keybin/
+obj/
 appsettings.Development.json
 Properties/
