@@ -9,7 +9,7 @@ Disallow: /Connexion
 Disallow: /Inscription
 
 # Sitemap location
-Sitemap: https://vessah14.github.io/Restaurant/sitemap.xml
+Sitemap: http://localhost:5174/sitemap.xml
 
 # Crawl delay (optional - adjust as needed)
 Crawl-delay: 1
