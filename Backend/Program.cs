@@ -134,12 +134,6 @@ else
     app.UseHsts();
 }
 
-// Désactiver HTTPS redirection en développement pour éviter les problèmes avec localhost
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
-
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseCors("FrontendPolicy");
