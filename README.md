@@ -1,11 +1,5 @@
 # Restaurant
 
-## Publication GitHub Pages
-
-Le workflow `Deploy frontends to GitHub Pages` publie le site public a la racine et l'administration sous `/admin/` a chaque push sur `main`. Dans les reglages du depot GitHub, selectionnez `Settings > Pages > Source: GitHub Actions`.
-
-GitHub Pages heberge uniquement les frontends statiques. L'API ASP.NET Core et MySQL doivent etre deployes sur Render, Docker Compose ou un autre hebergeur serveur. L'API utilisee par les builds GitHub est `https://restaurant-sxxt.onrender.com`.
-
 ## Deploiement avec Docker Compose
 
 1. Copiez `.env.example` vers `.env` et renseignez toutes les valeurs, en particulier `JWT_KEY` et les secrets des services externes.
