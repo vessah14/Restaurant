@@ -56,10 +56,13 @@ export function AuthProvider ({ children }) {
   }
 
   async function inscrire (donnees) {
-    const nouvelUtilisateur = await authApi.inscription(donnees)
-    // L'inscription ne connecte pas automatiquement — on redirige
-    // généralement vers la page de connexion après un succès
-    return nouvelUtilisateur
+    const resultat = await authApi.inscription(donnees)
+
+    localStorage.setItem('token', resultat.token)
+    localStorage.setItem('utilisateur', JSON.stringify(resultat.utilisateur))
+    setUtilisateur(resultat.utilisateur)
+
+    return resultat.utilisateur
   }
 
   function deconnecter () {

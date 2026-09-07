@@ -94,11 +94,7 @@ function Forms () {
         motDePasse: form.motDePasse
       })
 
-      navigate('/Connexion', {
-        state: {
-          message: t.validation.inscriptionSuccess || 'Inscription réussie !'
-        }
-      })
+      navigate('/Compte')
     } catch (err) {
       // L'erreur du backend (ex: "Cet email est déjà utilisé.") s'affiche
       // sous le champ email plutôt qu'en alert — plus cohérent avec le reste du formulaire
