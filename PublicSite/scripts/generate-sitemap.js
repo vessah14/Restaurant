@@ -1,4 +1,3 @@
-/* eslint-env node */
 import fs from "fs";
 
 const SITE_URL = process.env.VITE_SITE_URL || "http://localhost:5174";

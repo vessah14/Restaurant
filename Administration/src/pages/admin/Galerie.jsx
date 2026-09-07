@@ -16,7 +16,6 @@ const categoriesGalerie = [
 export default function Galerie () {
   const [active, setActive] = useState('Toutes')
   const [images, setImages] = useState([])
-  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
@@ -43,8 +42,6 @@ export default function Galerie () {
       setImages(formattedImages)
     } catch (error) {
       console.error('Erreur lors du chargement des images', error)
-    } finally {
-      setLoading(false)
     }
   }
 

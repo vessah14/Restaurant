@@ -12,12 +12,7 @@ import SEO from './admin/SEO'
 import Parametres from './admin/Setting'
 import Messages from './admin/Messages'
 import Notifications from './admin/Notifications'
-import {
-  notificationsApi,
-  reservationsApi,
-  avisApi,
-  utilisateursApi
-} from '../api'
+import { notificationsApi, reservationsApi, avisApi } from '../api'
 import { useAuthAdmin } from '../context/AuthAdminContext'
 
 export default function Container ({

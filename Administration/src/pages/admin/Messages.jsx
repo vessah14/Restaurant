@@ -1,11 +1,5 @@
 import { useState, useEffect } from 'react'
-import {
-  FaRegEnvelope,
-  FaCheck,
-  FaReply,
-  FaTrash,
-  FaEye
-} from 'react-icons/fa6'
+import { FaReply, FaTrash, FaEye } from 'react-icons/fa6'
 import { contactMessagesApi } from '../../api'
 import AppModal from '../../components/AppModal'
 

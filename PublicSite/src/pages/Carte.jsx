@@ -52,7 +52,7 @@ function HeaderTitle () {
           <h1 className="font-['Playfair_Display'] text-3xl md:text-6xl font-medium mb-5">
             {t.carte.titrePage}
           </h1>
-          <p className='w-70 md:w-150 md:text-xl text-sm text-center text-gray-400'>
+          <p className='w-full max-w-2xl px-4 text-center text-sm text-gray-400 md:text-xl'>
             {t.carte.desc}
           </p>
         </div>
@@ -99,7 +99,7 @@ function Filter () {
   return (
     <section className='flex flex-col justify-center items-center mx-auto px-6 py-10'>
       {/* Boutons des catégories */}
-      <div className='flex justify-center w-full gap-5 border-b border-gray-400'>
+      <div className='flex w-full flex-wrap justify-center gap-2 border-b border-gray-400 sm:gap-5'>
         {categoryItems.map(item => (
           <button
             key={item}
@@ -153,8 +153,8 @@ function Filter () {
           ))}
         </div>
       )}
-      <div className='flex justify-center items-center w-300 mt-10 mb-7'>
-        <span className='bg-[#e9e4da] p-5 px-10 rounded-2xl text-gray-500'>
+      <div className='mt-10 mb-7 flex w-full max-w-5xl items-center justify-center'>
+        <span className='rounded-2xl bg-[#e9e4da] p-5 px-6 text-center text-gray-500 sm:px-10'>
           {t.carte.allergenes}
         </span>
       </div>

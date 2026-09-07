@@ -41,7 +41,9 @@ function HeaderTitle () {
           <h1 className="font-['Playfair_Display'] text-4xl md:text-5xl lg:text-6xl font-medium ">
             {t.reserver.titrePage}
           </h1>
-          <p className='w-150 text-center text-gray-400'>{t.reserver.desc}</p>
+          <p className='w-full max-w-2xl px-4 text-center text-gray-400'>
+            {t.reserver.desc}
+          </p>
         </div>
       </main>
     </>

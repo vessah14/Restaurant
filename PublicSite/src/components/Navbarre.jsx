@@ -52,7 +52,7 @@ function AvatarUtilisateur ({ texteBlanc = false, compact = false }) {
 export default function Navbarre () {
   const { t } = useLanguage()
   const location = useLocation()
-  const { utilisateur, estConnecte, deconnecter } = useAuth()
+  const { estConnecte } = useAuth()
 
   const navigation = [
     { name: t.nav.accueil, route: '/' },
@@ -379,10 +379,4 @@ export default function Navbarre () {
       </DisclosurePanel>
     </Disclosure>
   )
-}
-
-function getInitiales (prenom, nom) {
-  const initPrenom = prenom?.charAt(0).toUpperCase() || ''
-  const initNom = nom?.charAt(0).toUpperCase() || ''
-  return `${initPrenom}${initNom}`
 }

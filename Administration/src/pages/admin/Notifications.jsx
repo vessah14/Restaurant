@@ -142,7 +142,7 @@ export default function Notifications ({ onNotificationCountChange }) {
   ]
 
   return (
-    <div className='min-h-screen bg-[#f5f1ea] p-8'>
+    <div className='min-h-screen bg-[#f5f1ea] p-4 sm:p-8'>
       {/* Header */}
       <div className='mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3'>
         <div>

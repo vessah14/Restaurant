@@ -2,7 +2,10 @@ import { api } from "./client";
 
 export const authApi = {
   login: (identifiant, motDePasse) =>
-    api.post("/api/Auth/login", { nom: identifiant, motDePasse }),
+    api.post("/api/Auth/login", {
+      nom: identifiant.trim(),
+      motDePasse,
+    }),
 
   inscription: (donnees) => api.post("/api/Auth/inscription", donnees),
 

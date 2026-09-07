@@ -40,7 +40,7 @@ function HeaderTitle () {
         <h1 className="font-['Playfair_Display'] text-3xl md:text-6xl font-medium mb-5">
           {t.contact.titrePage}
         </h1>
-        <p className='w-70 md:w-150 md:text-xl text-sm text-center text-gray-400'>
+        <p className='w-full max-w-2xl px-4 text-center text-sm text-gray-400 md:text-xl'>
           {t.contact.desc}
         </p>
       </div>

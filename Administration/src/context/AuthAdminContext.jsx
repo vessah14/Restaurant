@@ -14,7 +14,7 @@ export const AuthAdminProvider = ({ children }) => {
     const token = localStorage.getItem('adminToken')
     if (token) {
       // Vérifier que le token est valide (récupérer le profil)
-      verifierToken(token)
+      verifierToken()
     } else {
       setChargement(false)
     }
@@ -32,7 +32,7 @@ export const AuthAdminProvider = ({ children }) => {
     }
   }, [])
 
-  const verifierToken = async token => {
+  const verifierToken = async () => {
     try {
       const profil = await utilisateursApi.getMoi()
       if (profil.role !== 'admin') {
@@ -41,7 +41,7 @@ export const AuthAdminProvider = ({ children }) => {
       setUtilisateur(profil)
       setEstConnecte(true)
       setChargement(false)
-    } catch (error) {
+    } catch {
       localStorage.removeItem('adminToken')
       setUtilisateur(null)
       setEstConnecte(false)
@@ -54,9 +54,7 @@ export const AuthAdminProvider = ({ children }) => {
       setChargement(true)
       setErreur(null)
 
-      console.log('Tentative de connexion avec:', nom)
       const response = await authApi.login(nom, motDePasse)
-      console.log('Réponse de l\'API:', response)
 
       if (response.token && response.utilisateur) {
         // Vérifier que l'utilisateur est admin
@@ -70,8 +68,6 @@ export const AuthAdminProvider = ({ children }) => {
         localStorage.setItem('adminToken', response.token)
         setUtilisateur(response.utilisateur)
         setEstConnecte(true)
-        console.log('Connexion réussie, estConnecte:', true)
-
         return true
       }
 

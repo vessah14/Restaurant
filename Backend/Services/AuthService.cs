@@ -27,9 +27,11 @@ namespace Backend.Services
 
         public async Task<LoginResponseDto?> ConnexionAsync(LoginDto dto)
         {
+            var identifiant = dto.Nom.Trim().ToLower();
+
             var utilisateur = await _context.Utilisateurs
                 .FirstOrDefaultAsync(u =>
-                    (u.Nom == dto.Nom || u.Email == dto.Nom) && u.Actif);
+                    (u.Nom.ToLower() == identifiant || u.Email.ToLower() == identifiant) && u.Actif);
 
             if (utilisateur is null)
                 return null;
@@ -162,6 +164,8 @@ namespace Backend.Services
 
         public async Task<LoginResponseDto?> InscriptionAsync(CreerUtilisateurDto dto)
         {
+            dto.Email = dto.Email.Trim().ToLower();
+
             // Vérifier si l'email existe
             var emailExiste = await _context.Utilisateurs
                 .AnyAsync(u => u.Email == dto.Email);

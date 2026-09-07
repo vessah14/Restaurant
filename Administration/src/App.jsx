@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import Container from './pages/Container'
 import Connexion from './pages/Connexion'
 import { useAuthAdmin } from './context/AuthAdminContext'
@@ -6,7 +5,12 @@ import { useAuthAdmin } from './context/AuthAdminContext'
 function App () {
   const { estConnecte, chargement } = useAuthAdmin()
 
-  console.log('App render - estConnecte:', estConnecte, 'chargement:', chargement)
+  console.log(
+    'App render - estConnecte:',
+    estConnecte,
+    'chargement:',
+    chargement
+  )
 
   if (chargement) {
     return (
@@ -21,7 +25,10 @@ function App () {
     )
   }
 
-  console.log('App render - Affichage:', estConnecte ? 'Container' : 'Connexion')
+  console.log(
+    'App render - Affichage:',
+    estConnecte ? 'Container' : 'Connexion'
+  )
   return <>{estConnecte ? <Container /> : <Connexion />}</>
 }
 

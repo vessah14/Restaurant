@@ -9,7 +9,7 @@ export default function Connexion () {
   const [loginNom, setLoginNom] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
 
-  const { connecter } = useAuthAdmin()
+  const { connecter, erreur: erreurAuth } = useAuthAdmin()
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -19,7 +19,7 @@ export default function Connexion () {
     try {
       const success = await connecter(loginNom, loginPassword)
       if (!success) {
-        setErreur('Nom ou mot de passe incorrect.')
+        setErreur(erreurAuth || 'Nom ou mot de passe incorrect.')
       }
     } catch (error) {
       setErreur(error.message)
@@ -27,6 +27,8 @@ export default function Connexion () {
       setChargement(false)
     }
   }
+
+  const messageErreur = erreur || erreurAuth
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100 px-4'>
@@ -40,9 +42,9 @@ export default function Connexion () {
         </div>
 
         {/* Messages */}
-        {erreur && (
+        {messageErreur && (
           <div className='mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm'>
-            {erreur}
+            {messageErreur}
           </div>
         )}
 

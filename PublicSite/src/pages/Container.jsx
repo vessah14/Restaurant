@@ -109,14 +109,14 @@ function HeaderTitle () {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <div className='flex flex-col justify-center items-center h-230'>
+          <div className='flex min-h-[34rem] flex-col justify-center items-center px-4 py-16 sm:min-h-[40rem]'>
             <span
               style={{ color: '#C4A060' }}
               className='md:text-sm text-xs font-light tracking-[0.3em]'
             >
               {t.home.badge}
             </span>
-            <h1 className="font-['Playfair_Display'] text-4xl sm:text-5xl lg:text-8xl w-120 lg:w-220 text-center">
+            <h1 className="w-full max-w-4xl text-center font-['Playfair_Display'] text-4xl sm:text-5xl lg:text-8xl">
               {t.home.heroTitle1}{' '}
               <span className='italic'>{t.home.heroTitle2}</span>{' '}
               {t.home.heroTitle3}
@@ -452,7 +452,7 @@ function Body () {
           </div>
 
           {/*Maps*/}
-          <div className='w-200'>
+          <div className='w-full max-w-5xl'>
             <div className='rounded-2xl w-full overflow-hidden shadow-lg h-[420px]'>
               <iframe
                 title='Localisation du restaurant'

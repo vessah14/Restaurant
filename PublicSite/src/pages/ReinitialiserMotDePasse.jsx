@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import Navbarre2 from '../components/Navbarre2'
 import Footer from '../components/Footer'
 import { authApi } from '../api/auth'

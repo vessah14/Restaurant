@@ -53,7 +53,7 @@ function AvatarUtilisateur ({ texteBlanc = false, compact = false }) {
 export default function Navbarre2 () {
   const location = useLocation()
   const { t } = useLanguage()
-  const { utilisateur, estConnecte } = useAuth()
+  const { estConnecte } = useAuth()
 
   const navigation = [
     { name: t.nav.accueil, route: '/' },
@@ -117,7 +117,7 @@ export default function Navbarre2 () {
       shadow-xl
       '
     >
-      <div className='mx-auto max-w-7xl px-6'>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6'>
         <div className='relative flex h-20 items-center justify-between'>
           {/* LOGO */}
 
@@ -155,7 +155,7 @@ export default function Navbarre2 () {
           <div
             className='
             hidden
-            sm:flex
+            lg:flex
             items-center
             gap-14
             '
@@ -261,7 +261,7 @@ export default function Navbarre2 () {
 
           {/* MENU MOBILE */}
 
-          <div className='flex items-center sm:hidden'>
+          <div className='flex items-center lg:hidden'>
             <DisclosureButton
               className='
               group
@@ -297,7 +297,7 @@ export default function Navbarre2 () {
 
       <DisclosurePanel
         className='
-        sm:hidden
+        lg:hidden
         bg-white
         '
       >

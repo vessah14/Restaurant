@@ -8,7 +8,7 @@ export default function Contact1 () {
   const adresse = '2, rue de la Colombe, 75004 Paris'
   const { t } = useLanguage()
   const horairesLines = t.contact.horairesDetail.split('\n')
-  
+
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
@@ -20,7 +20,7 @@ export default function Contact1 () {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     setLoading(true)
     setError('')
@@ -36,14 +36,14 @@ export default function Contact1 () {
         sujet: '',
         message: ''
       })
-    } catch (err) {
-      setError('Erreur lors de l\'envoi du message. Veuillez réessayer.')
+    } catch {
+      setError("Erreur lors de l'envoi du message. Veuillez réessayer.")
     } finally {
       setLoading(false)
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -199,7 +199,7 @@ export default function Contact1 () {
                   </Link>
                 </div>
                 {/*Maps*/};
-                <div className='w-200'>
+                <div className='w-full max-w-5xl'>
                   <div className='rounded-2xl w-full overflow-hidden shadow-lg h-[420px]'>
                     <iframe
                       title='Localisation du restaurant'
@@ -324,7 +324,7 @@ export default function Contact1 () {
                     placeholder={t.contact.messagePlaceholder}
                   />
                 </div>
-                <button 
+                <button
                   type='submit'
                   disabled={loading}
                   className='w-full px-6 py-3 mt-4 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg focus:outline-none focus:ring focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed'

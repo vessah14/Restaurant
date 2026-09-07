@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   AreaChart,
   Area,
@@ -235,7 +235,7 @@ export default function StatistiquesDashboard () {
               Tunnel de conversion
             </h2>
             <div className='space-y-4'>
-              {funnel.map((f, index) => (
+              {funnel.map(f => (
                 <div key={f.etape}>
                   <div className='mb-1.5 flex items-baseline justify-between'>
                     <span className='text-sm text-[#1B2333]'>{f.etape}</span>

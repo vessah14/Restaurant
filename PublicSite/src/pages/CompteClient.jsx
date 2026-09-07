@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useLanguage } from '../i18n/useLanguage'
 import Navbarre2 from '../components/Navbarre2'
@@ -78,7 +78,7 @@ export default function CompteClient () {
       setProfil({ ...profil, ...formProfil })
       setEditionMode(false)
       setErreur(null)
-    } catch (err) {
+    } catch {
       setErreur('Erreur lors de la sauvegarde du profil')
     }
   }
@@ -107,7 +107,7 @@ export default function CompteClient () {
       setAvisForm({ note: 5, commentaire: '' })
       setErreur(null)
       setModalMessage('Avis envoyé avec succès !')
-    } catch (err) {
+    } catch {
       setErreur("Erreur lors de l'envoi de l'avis")
     }
   }
@@ -147,7 +147,7 @@ export default function CompteClient () {
           <h1 className="font-['Playfair_Display'] text-3xl md:text-6xl font-medium">
             {utilisateur?.prenom} {utilisateur?.nom}
           </h1>
-          <p className='w-70 md:w-150 md:text-xl text-sm text-center text-gray-400'>
+          <p className='w-full max-w-2xl px-4 text-center text-sm text-gray-400 md:text-xl'>
             {utilisateur?.email}
           </p>
         </div>
@@ -520,8 +520,6 @@ function OngletProfil ({
 }
 
 function OngletAvis ({ avisForm, onChange, onSubmit }) {
-  const { t } = useLanguage()
-
   return (
     <div className='bg-white rounded-lg shadow-md p-6'>
       <h2 className='text-xl font-semibold mb-6' style={{ color: '#C4A060' }}>

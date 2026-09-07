@@ -6,7 +6,6 @@ import { validateLogin, hasErrors } from '../utils/validation'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { authApi } from '../api/auth'
-import AppModal from '../components/AppModal'
 
 export default function Connexion () {
   return (
@@ -39,7 +38,7 @@ function HeaderTitle () {
           <h1 className="font-['Playfair_Display'] text-3xl md:text-6xl font-medium">
             {t.connexion.titrePage}
           </h1>
-          <p className='w-70 md:w-150 md:text-xl text-sm text-center text-gray-400'>
+          <p className='w-full max-w-2xl px-4 text-center text-sm text-gray-400 md:text-xl'>
             {t.connexion.desc}
           </p>
         </div>
@@ -122,7 +121,7 @@ function Forms () {
   return (
     <>
       <div className='flex justify-center items-center mt-20 mb-30'>
-        <div className='bg-white shadow-2xl p-5 w-100 py-10 rounded-2xl'>
+        <div className='w-full max-w-md rounded-2xl bg-white p-5 py-10 shadow-2xl sm:p-8'>
           {messageSucces && (
             <p className='bg-green-50 text-green-700 px-4 py-2 rounded-lg text-sm mb-4'>
               {messageSucces}

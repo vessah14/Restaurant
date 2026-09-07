@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { AlertTriangle } from 'lucide-react'
 import { pagesApi } from '../../api'
 import AppModal from '../../components/AppModal'
 
@@ -43,7 +42,6 @@ export default function SEO () {
   const [pages, setPages] = useState([])
   const [active, setActive] = useState(null)
   const [pageData, setPageData] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [modalMessage, setModalMessage] = useState(null)
   const page = pages.find(p => p.key === active)
@@ -67,7 +65,6 @@ export default function SEO () {
 
   useEffect(() => {
     if (!active) return
-    setLoading(true)
     setPageData(null)
     chargerPageData()
   }, [active])
@@ -81,8 +78,6 @@ export default function SEO () {
       )
     } catch (error) {
       console.error('Erreur lors du chargement des données de la page', error)
-    } finally {
-      setLoading(false)
     }
   }
 

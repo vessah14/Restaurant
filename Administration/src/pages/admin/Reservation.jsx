@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Check, X, Search, Calendar } from 'lucide-react'
 import { reservationsApi } from '../../api'
-import { useAuthAdmin } from '../../context/AuthAdminContext'
 import AppModal from '../../components/AppModal'
 
 const STATUS_OPTIONS = [
@@ -259,7 +258,6 @@ function ReservationCard ({ r, onSelect, onConfirm, onCancel }) {
 
 function ReservationsPage ({ onStatusChange, onDelete }) {
   const [reservations, setReservations] = useState([])
-  const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('tous')
@@ -290,8 +288,6 @@ function ReservationsPage ({ onStatusChange, onDelete }) {
       setReservations(formattedReservations)
     } catch (error) {
       console.error('Erreur lors du chargement des réservations', error)
-    } finally {
-      setLoading(false)
     }
   }
 

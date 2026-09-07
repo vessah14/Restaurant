@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { X, Plus, Upload, ImagePlus } from 'lucide-react'
+import { X, Upload, ImagePlus } from 'lucide-react'
 import { platsApi } from '../../api'
 import { resolveMediaUrl } from '../../api/client'
 
@@ -19,7 +19,6 @@ export default function Menu () {
   const [active, setActive] = useState('plats')
   const [allItems, setAllItems] = useState([])
   const [categoryIds, setCategoryIds] = useState({})
-  const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [updatingId, setUpdatingId] = useState(null)
@@ -53,18 +52,25 @@ export default function Menu () {
 
   const chargerPlats = async () => {
     try {
-      const [data, carte] = await Promise.all([
+      const [platsResult, carteResult] = await Promise.allSettled([
         platsApi.getAll(),
         platsApi.getCarte()
       ])
-      setAllItems(data)
+
+      const carte = carteResult.status === 'fulfilled' ? carteResult.value : []
       setCategoryIds(
-        Object.fromEntries(carte.map(categorie => [categorie.code, categorie.id]))
+        Object.fromEntries(
+          carte.map(categorie => [categorie.code, categorie.id])
+        )
       )
+
+      if (platsResult.status === 'fulfilled') {
+        setAllItems(platsResult.value)
+      } else {
+        throw platsResult.reason
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des plats', error)
-    } finally {
-      setLoading(false)
     }
   }
 
@@ -109,28 +115,47 @@ export default function Menu () {
   const handleSubmit = async e => {
     e.preventDefault()
     setUploadError(null)
+
+    if (!formData.nom.trim()) {
+      setUploadError('Le nom du plat est obligatoire.')
+      return
+    }
+
+    if (formData.prix === '' || Number(formData.prix) < 0) {
+      setUploadError('Le prix du plat doit être supérieur ou égal à 0.')
+      return
+    }
+
     setUploading(true)
 
     try {
       const categorieId = categoryIds[formData.categorie]
 
       if (!categorieId) {
-        throw new Error('La categorie selectionnee est introuvable. Rechargez la page puis reessayez.')
+        throw new Error(
+          'La categorie selectionnee est introuvable. Rechargez la page puis reessayez.'
+        )
       }
 
       const formDataToSend = new FormData()
-      formDataToSend.append('categorieId', categorieId)
+      formDataToSend.append('categorieId', String(categorieId))
       formDataToSend.append('prix', formData.prix || '0')
-      formDataToSend.append('ordreAffichage', editingId
-        ? allItems.find(item => item.id === editingId)?.ordreAffichage || 0
-        : allItems.length + 1)
+      formDataToSend.append(
+        'ordreAffichage',
+        editingId
+          ? allItems.find(item => item.id === editingId)?.ordreAffichage || 0
+          : allItems.length + 1
+      )
       formDataToSend.append('nomFr', formData.nom)
       formDataToSend.append('descriptionFr', formData.description || '')
       formDataToSend.append('nomEn', formData.nom)
       formDataToSend.append('descriptionEn', formData.description || '')
-      formDataToSend.append('disponible', editingId
-        ? allItems.find(item => item.id === editingId)?.disponible ?? true
-        : true)
+      formDataToSend.append(
+        'disponible',
+        editingId
+          ? allItems.find(item => item.id === editingId)?.disponible ?? true
+          : true
+      )
 
       if (formData.imageFile) {
         formDataToSend.append('imageFile', formData.imageFile)
@@ -347,7 +372,7 @@ export default function Menu () {
       {/* Modal d'ajout */}
       {showModal && (
         <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4'>
-          <div className='bg-white rounded-2xl w-full max-w-md p-6'>
+          <div className='max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 sm:p-6'>
             <div className='flex items-center justify-between mb-6'>
               <h2 className='text-lg font-bold text-[#1A1D24]'>
                 {editingId ? 'Modifier l’élément' : 'Ajouter un élément'}
@@ -441,12 +466,14 @@ export default function Menu () {
                         Upload en cours...
                       </span>
                     </>
-                  ) : (formData.imageFile && imagePreviewUrl) || formData.existingImageUrl ? (
+                  ) : (formData.imageFile && imagePreviewUrl) ||
+                    formData.existingImageUrl ? (
                     <>
                       <img
-                        src={formData.imageFile
-                          ? imagePreviewUrl
-                          : resolveMediaUrl(formData.existingImageUrl)
+                        src={
+                          formData.imageFile
+                            ? imagePreviewUrl
+                            : resolveMediaUrl(formData.existingImageUrl)
                         }
                         alt='Aperçu'
                         className='max-h-28 rounded-lg object-cover'

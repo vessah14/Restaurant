@@ -21,12 +21,6 @@ const statusMapping = {
   refuse: 'refuse'
 }
 
-const reverseStatusMapping = {
-  attente: 'en_attente',
-  publie: 'publie',
-  refuse: 'refuse'
-}
-
 const tabs = [
   { key: 'tous', label: 'Tous' },
   { key: 'attente', label: 'En attente' },
@@ -51,7 +45,6 @@ const statusStyle = {
 export default function Avis () {
   const [tab, setTab] = useState('attente')
   const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(true)
   const [reviewToDelete, setReviewToDelete] = useState(null)
 
   useEffect(() => {
@@ -74,8 +67,6 @@ export default function Avis () {
       setReviews(formattedReviews)
     } catch (error) {
       console.error('Erreur lors du chargement des avis', error)
-    } finally {
-      setLoading(false)
     }
   }
 

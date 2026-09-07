@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Circle, Bell, X, CheckCheck, Trash2, Clock } from 'lucide-react'
+import { Circle, Bell, CheckCheck, Clock } from 'lucide-react'
 import { notificationsApi } from '../api'
 
 function formatDateFr (date) {
