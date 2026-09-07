@@ -132,7 +132,7 @@ export default function Navbarre2 () {
               text-black
               "
             >
-              Les Deux Colombes
+              Resto
             </Link>
 
             <span

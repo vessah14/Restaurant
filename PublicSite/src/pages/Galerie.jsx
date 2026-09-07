@@ -10,7 +10,7 @@ export default function Galerie () {
   return (
     <>
       <Seo
-        title='Galerie Photos — Les Deux Colombes | Découvrez notre Restaurant'
+        title='Galerie Photos — Resto | Découvrez notre Restaurant'
         description="Parcourez notre galerie de photos du restaurant, de nos plats savoureux et de l'ambiance chaleureuse. Bienvenue à Paris."
         url='/Galerie'
         keywords='galerie restaurant, photos intérieur, plats, ambiance, Paris, décor'

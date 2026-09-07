@@ -12,8 +12,8 @@ export default function Histoire () {
   return (
     <>
       <Seo
-        title='Notre Histoire — Les Deux Colombes | Restaurant Parisien'
-        description="Découvrez l'histoire des Deux Colombes, restaurant français emblématique de Paris. Une passion pour la gastronomie française et les traditions culinaires."
+        title='Notre Histoire — Resto | Restaurant Parisien'
+        description="Découvrez l'histoire de Resto, restaurant français emblématique de Paris. Une passion pour la gastronomie française et les traditions culinaires."
         url='/About'
         keywords='histoire restaurant, tradition française, Paris, gastronomie, restaurant familial'
       />
@@ -76,7 +76,7 @@ function Body () {
         >
           <img
             src={fond8}
-            alt='Restaurant Les Deux Colombes'
+            alt='Restaurant Resto'
             className='w-full max-w-xl rounded-3xl object-cover shadow-2xl duration-500 hover:scale-[1.02]'
           />
         </motion.div>

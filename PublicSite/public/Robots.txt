@@ -1,4 +1,4 @@
-# Robots.txt pour Les Deux Colombes - Restaurant
+# Robots.txt pour Resto - Restaurant
 
 # Allow all crawlers by default
 User-agent: *

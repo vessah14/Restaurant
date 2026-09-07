@@ -17,7 +17,7 @@ export default function Footer () {
                   {/* Logo */}
                   <div className='flex flex-col justify-center shrink-0 text-white'>
                     <h1 className="text-xl tracking-[0.12em] font-bold font-['Playfair_Display'] sm:text-2xl sm:tracking-[0.2em]">
-                      Les Deux Colombes
+                      Resto
                     </h1>
 
                     <span
@@ -169,7 +169,7 @@ export default function Footer () {
             <LanguageSwitcher />
 
             <span className=' text-gray-500 text-sm '>
-              © 2025 Les Deux Colombes. {t.footer.droits}
+              © 2025 Resto. {t.footer.droits}
             </span>
           </div>
         </div>

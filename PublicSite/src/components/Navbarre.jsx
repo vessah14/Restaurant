@@ -137,7 +137,7 @@ export default function Navbarre () {
               ${navbar ? 'text-black' : 'text-white'}
               `}
             >
-              Les Deux Colombes
+              Resto
             </Link>
 
             <span

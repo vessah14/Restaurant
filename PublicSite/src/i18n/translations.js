@@ -26,7 +26,7 @@ export const translations = {
       notreHistoire: "NOTRE HISTOIRE",
       histoireTitle: "Une adresse mythique au cœur de l'Île de la Cité",
       histoireP1:
-        "Depuis 1958, les Deux Colombes perpétuent la tradition de la grande cuisine française dans l'un des quartiers les plus chargés d'histoire de Paris, à quelques pas de Notre-Dame de Paris.",
+        "Depuis 1958, Resto perpétue la tradition de la grande cuisine française dans l'un des quartiers les plus chargés d'histoire de Paris, à quelques pas de Notre-Dame de Paris.",
       histoireP2:
         "Nichée dans une rue pavée de l'Île de la Cité, cette table réunit amoureux de gastronomie, voyageurs du monde entier et habitués fidèles depuis plus de soixante ans.",
       decouvrirHistoire: "Découvrir notre histoire →",
@@ -43,7 +43,7 @@ export const translations = {
       exp4Title: "Ambiance intime",
       exp4Desc: "Salle chaleureuse et feutrée",
       galerie: "GALERIE",
-      galerieTitle: "Instants aux Deux Colombes",
+      galerieTitle: "Instants chez Resto",
       voirGalerie: "Voir toute la galerie",
       temoignages: "Témoignages",
       temoignagesTitle: "Ce que disent nos clients",
@@ -83,7 +83,7 @@ export const translations = {
       titrePage: "65 ans de passion culinaire",
       citation:
         "« Notre mission a toujours été la même : offrir à chaque convive une expérience gastronomique authentique, empreinte de chaleur et d'histoire. »",
-      p1: "Fondé en 1958 dans le cœur historique de Paris, Les Deux Colombes est bien plus qu'un restaurant. C'est une institution, un lieu de mémoire où la cuisine française est célébrée dans toute sa splendeur.",
+      p1: "Fondé en 1958 dans le cœur historique de Paris, Resto est bien plus qu'un restaurant. C'est une institution, un lieu de mémoire où la cuisine française est célébrée dans toute sa splendeur.",
       p2: "Situé à deux pas de Notre-Dame, notre établissement conjugue depuis six décennies l'élégance d'un décor authentique avec l'excellence d'une cuisine qui honore les grands classiques de la gastronomie française.",
       chronologie: "Chronologie",
       grandesEtapes: "Les grandes étapes",
@@ -91,7 +91,7 @@ export const translations = {
       philosophieTitle:
         "La tradition comme boussole, la création comme horizon",
       philosophieP1:
-        "Chez Les Deux Colombes, chaque plat est une déclaration d'amour à la cuisine française. Nos chefs travaillent chaque jour avec des produits soigneusement sélectionnés auprès des meilleurs producteurs.",
+        "Chez Resto, chaque plat est une déclaration d'amour à la cuisine française. Nos chefs travaillent chaque jour avec des produits soigneusement sélectionnés auprès des meilleurs producteurs.",
       philosophieP2:
         "Notre philosophie est simple : respecter les saisons, honorer les techniques et toujours surprendre avec générosité et sincérité.",
       reserverTable: "Réserver une table",
@@ -99,7 +99,7 @@ export const translations = {
         {
           year: "1958",
           title: "La naissance d'une légende",
-          text: "Les Deux Colombes ouvrent leurs portes dans l'une des plus belles rues de l'Île de la Cité, à l'ombre des tours de Notre-Dame. Le restaurant s'installe dans une maison du XVIIe siècle.",
+          text: "Resto ouvre ses portes dans l'une des plus belles rues de l'Île de la Cité, à l'ombre des tours de Notre-Dame. Le restaurant s'installe dans une maison du XVIIe siècle.",
         },
         {
           year: "1975",
@@ -109,7 +109,7 @@ export const translations = {
         {
           year: "1989",
           title: "Reconnaissance nationale",
-          text: "Les Deux Colombes reçoivent leur première distinction gastronomique. Le restaurant est reconnu comme l'une des meilleures tables de Paris par les guides gastronomiques.",
+          text: "Resto reçoit sa première distinction gastronomique. Le restaurant est reconnu comme l'une des meilleures tables de Paris par les guides gastronomiques.",
         },
         {
           year: "2005",
@@ -124,14 +124,14 @@ export const translations = {
         {
           year: "Aujourd'hui",
           title: "Toujours vivant, toujours parisien",
-          text: "Après 65 ans d'histoire, Les Deux Colombes continuent de faire rayonner la gastronomie française auprès de milliers de convives venus du monde entier.",
+          text: "Après 65 ans d'histoire, Resto continue de faire rayonner la gastronomie française auprès de milliers de convives venus du monde entier.",
         },
       ],
     },
     // Page Galerie
     galeriePage: {
       titre: "Galerie",
-      titrePage: "L'univers des Deux Colombes",
+      titrePage: "L'univers de Resto",
       desc: "Plats, ambiance, art de la table et instants parisiens.",
       tous: "Tous",
       cuisine: "Cuisine",
@@ -145,7 +145,7 @@ export const translations = {
       titrePage: "Questions fréquentes",
       desc: "Tout ce que vous devez savoir sur notre restaurant proche de Notre-Dame de Paris — réservation, menu, localisation et accès.",
       intro:
-        "Restaurant français traditionnel sur l'Île de la Cité, Les Deux Colombes est la table de référence pour dîner près de Notre-Dame de Paris. Retrouvez toutes nos réponses ci-dessous.",
+        "Restaurant français traditionnel sur l'Île de la Cité, Resto est la table de référence pour dîner près de Notre-Dame de Paris. Retrouvez toutes nos réponses ci-dessous.",
       pasTrouve: "Vous n'avez pas trouvé votre réponse ?",
       pasTrouveDesc:
         "Notre équipe est disponible pour vous accueillir et répondre à toutes vos questions sur notre restaurant près de Notre-Dame.",
@@ -155,13 +155,13 @@ export const translations = {
         {
           question: "Où manger près de Notre-Dame de Paris ?",
           answer:
-            "Les Deux Colombes est situé à seulement 2 minutes à pied de Notre-Dame de Paris. Nous proposons une cuisine française raffinée dans un cadre chaleureux et élégant.",
+            "Resto est situé à seulement 2 minutes à pied de Notre-Dame de Paris. Nous proposons une cuisine française raffinée dans un cadre chaleureux et élégant.",
         },
         {
           question:
             "Le restaurant est-il situé près de la cathédrale Notre-Dame ?",
           answer:
-            "Oui, Les Deux Colombes est l'un des restaurants les plus proches de Notre-Dame de Paris. Situés sur l'Île de la Cité dans le 4e arrondissement, nous sommes à moins de 200 mètres de la cathédrale. C'est l'adresse idéale pour déjeuner ou dîner près de Notre-Dame après une visite du monument.",
+            "Oui, Resto est l'un des restaurants les plus proches de Notre-Dame de Paris. Situés sur l'Île de la Cité dans le 4e arrondissement, nous sommes à moins de 200 mètres de la cathédrale. C'est l'adresse idéale pour déjeuner ou dîner près de Notre-Dame après une visite du monument.",
         },
         {
           question: "Peut-on réserver en ligne ?",
@@ -171,7 +171,7 @@ export const translations = {
         {
           question: "Quels sont les horaires d'ouverture ?",
           answer:
-            "Les Deux Colombes sont ouverts du lundi au samedi. Service du déjeuner de 12h00 à 14h30. Service du dîner de 19h00 à 22h00 (dernière réservation à 21h30). Le restaurant est fermé le dimanche et les jours fériés. Des horaires exceptionnels peuvent s'appliquer pendant les fêtes de fin d'année.",
+            "Resto est ouvert du lundi au samedi. Service du déjeuner de 12h00 à 14h30. Service du dîner de 19h00 à 22h00 (dernière réservation à 21h30). Le restaurant est fermé le dimanche et les jours fériés. Des horaires exceptionnels peuvent s'appliquer pendant les fêtes de fin d'année.",
         },
         {
           question: "Le restaurant propose-t-il des options végétariennes ?",
@@ -187,7 +187,7 @@ export const translations = {
         {
           question: "Le restaurant accepte-t-il les groupes ?",
           answer:
-            "Oui, Les Deux Colombes accueillent les groupes jusqu'à 30 personnes. Pour les groupes de plus de 8 personnes, contactez-nous directement par téléphone ou par email afin que nous puissions définir ensemble les conditions d'accueil, les menus de groupe et les modalités de réservation. Des espaces semi-privatisés sont disponibles.",
+            "Oui, Resto accueille les groupes jusqu'à 30 personnes. Pour les groupes de plus de 8 personnes, contactez-nous directement par téléphone ou par email afin que nous puissions définir ensemble les conditions d'accueil, les menus de groupe et les modalités de réservation. Des espaces semi-privatisés sont disponibles.",
         },
         {
           question: "Quels sont les moyens de paiement acceptés ?",
@@ -202,7 +202,7 @@ export const translations = {
       titrePage: "Prenons contact",
       desc: "Notre équipe est à votre disposition pour toute question ou demande particulière.",
       informations: "INFORMATIONS",
-      lesDeuxColombes: "Les Deux Colombes",
+      lesDeuxColombes: "Resto",
       email: "Email",
       adresse: "Adresse",
       horaires: "Horaires",
@@ -242,7 +242,7 @@ export const translations = {
     inscription: {
       titre: "Espace Client",
       titrePage: "Créer un compte",
-      desc: "Rejoignez les Deux Colombes et gérez vos réservations en toute simplicité.",
+      desc: "Rejoignez Resto et gérez vos réservations en toute simplicité.",
       prenom: "Prénom",
       nom: "Nom",
       telephone: "Téléphone",
@@ -432,7 +432,7 @@ export const translations = {
       notreHistoire: "OUR STORY",
       histoireTitle: "A legendary address in the heart of the Île de la Cité",
       histoireP1:
-        "Since 1958, Les Deux Colombes have perpetuated the tradition of great French cuisine in one of the most historic districts of Paris, just steps away from Notre-Dame de Paris.",
+        "Since 1958, Resto has perpetuated the tradition of great French cuisine in one of the most historic districts of Paris, just steps away from Notre-Dame de Paris.",
       histoireP2:
         "Nestled in a cobbled street of the Île de la Cité, this table brings together gastronomy lovers, travellers from around the world and loyal regulars for over sixty years.",
       decouvrirHistoire: "Discover our story →",
@@ -449,7 +449,7 @@ export const translations = {
       exp4Title: "Intimate atmosphere",
       exp4Desc: "Warm and cosy dining room",
       galerie: "GALLERY",
-      galerieTitle: "Moments at Les Deux Colombes",
+      galerieTitle: "Moments at Resto",
       voirGalerie: "View full gallery",
       temoignages: "Testimonials",
       temoignagesTitle: "What our clients say",
@@ -489,14 +489,14 @@ export const translations = {
       titrePage: "65 years of culinary passion",
       citation:
         '"Our mission has always been the same: to offer every guest an authentic gastronomic experience, imbued with warmth and history."',
-      p1: "Founded in 1958 in the historic heart of Paris, Les Deux Colombes is much more than a restaurant. It is an institution, a place of memory where French cuisine is celebrated in all its splendour.",
+      p1: "Founded in 1958 in the historic heart of Paris, Resto is much more than a restaurant. It is an institution, a place of memory where French cuisine is celebrated in all its splendour.",
       p2: "Located a stone's throw from Notre-Dame, our establishment has combined the elegance of an authentic setting with the excellence of a cuisine that honours the great classics of French gastronomy for over six decades.",
       chronologie: "Timeline",
       grandesEtapes: "Key milestones",
       philosophie: "Our philosophy",
       philosophieTitle: "Tradition as a compass, creation as a horizon",
       philosophieP1:
-        "At Les Deux Colombes, every dish is a declaration of love for French cuisine. Our chefs work every day with carefully selected products from the finest producers.",
+        "At Resto, every dish is a declaration of love for French cuisine. Our chefs work every day with carefully selected products from the finest producers.",
       philosophieP2:
         "Our philosophy is simple: respect the seasons, honour the techniques and always surprise with generosity and sincerity.",
       reserverTable: "Book a table",
@@ -504,7 +504,7 @@ export const translations = {
         {
           year: "1958",
           title: "The birth of a legend",
-          text: "Les Deux Colombes opens its doors on one of the most beautiful streets of the Île de la Cité, in the shadow of Notre-Dame's towers. The restaurant is established in a 17th-century townhouse.",
+          text: "Resto opens its doors on one of the most beautiful streets of the Île de la Cité, in the shadow of Notre-Dame's towers. The restaurant is established in a 17th-century townhouse.",
         },
         {
           year: "1975",
@@ -514,7 +514,7 @@ export const translations = {
         {
           year: "1989",
           title: "National recognition",
-          text: "Les Deux Colombes receives its first gastronomic distinction. The restaurant is recognised as one of the finest tables in Paris by gastronomic guides.",
+          text: "Resto receives its first gastronomic distinction. The restaurant is recognised as one of the finest tables in Paris by gastronomic guides.",
         },
         {
           year: "2005",
@@ -529,14 +529,14 @@ export const translations = {
         {
           year: "Today",
           title: "Always alive, always Parisian",
-          text: "After 65 years of history, Les Deux Colombes continue to showcase French gastronomy to thousands of diners from around the world.",
+          text: "After 65 years of history, Resto continues to showcase French gastronomy to thousands of diners from around the world.",
         },
       ],
     },
     // Gallery page
     galeriePage: {
       titre: "Gallery",
-      titrePage: "The world of Les Deux Colombes",
+      titrePage: "The world of Resto",
       desc: "Dishes, atmosphere, table setting and Parisian moments.",
       tous: "All",
       cuisine: "Cuisine",
@@ -550,7 +550,7 @@ export const translations = {
       titrePage: "Frequently asked questions",
       desc: "Everything you need to know about our restaurant near Notre-Dame de Paris — booking, menu, location and access.",
       intro:
-        "A traditional French restaurant on the Île de la Cité, Les Deux Colombes is the reference table for dining near Notre-Dame de Paris. Find all our answers below.",
+        "A traditional French restaurant on the Île de la Cité, Resto is the reference table for dining near Notre-Dame de Paris. Find all our answers below.",
       pasTrouve: "Haven't found your answer?",
       pasTrouveDesc:
         "Our team is available to welcome you and answer all your questions about our restaurant near Notre-Dame.",
@@ -560,12 +560,12 @@ export const translations = {
         {
           question: "Where to eat near Notre-Dame de Paris?",
           answer:
-            "Les Deux Colombes is located just 2 minutes' walk from Notre-Dame de Paris. We offer refined French cuisine in a warm and elegant setting.",
+            "Resto is located just 2 minutes' walk from Notre-Dame de Paris. We offer refined French cuisine in a warm and elegant setting.",
         },
         {
           question: "Is the restaurant located near Notre-Dame Cathedral?",
           answer:
-            "Yes, Les Deux Colombes is one of the closest restaurants to Notre-Dame de Paris. Located on the Île de la Cité in the 4th arrondissement, we are less than 200 metres from the cathedral. It is the ideal address for lunch or dinner near Notre-Dame after visiting the monument.",
+            "Yes, Resto is one of the closest restaurants to Notre-Dame de Paris. Located on the Île de la Cité in the 4th arrondissement, we are less than 200 metres from the cathedral. It is the ideal address for lunch or dinner near Notre-Dame after visiting the monument.",
         },
         {
           question: "Can I book online?",
@@ -575,7 +575,7 @@ export const translations = {
         {
           question: "What are the opening hours?",
           answer:
-            "Les Deux Colombes is open Monday to Saturday. Lunch service from 12:00 to 14:30. Dinner service from 19:00 to 22:00 (last reservation at 21:30). The restaurant is closed on Sundays and public holidays. Exceptional hours may apply during the end-of-year holidays.",
+            "Resto is open Monday to Saturday. Lunch service from 12:00 to 14:30. Dinner service from 19:00 to 22:00 (last reservation at 21:30). The restaurant is closed on Sundays and public holidays. Exceptional hours may apply during the end-of-year holidays.",
         },
         {
           question: "Does the restaurant offer vegetarian options?",
@@ -590,7 +590,7 @@ export const translations = {
         {
           question: "Does the restaurant accept groups?",
           answer:
-            "Yes, Les Deux Colombes welcomes groups of up to 30 people. For groups of more than 8, please contact us directly by phone or email so we can agree on reception conditions, group menus and booking arrangements. Semi-private spaces are available.",
+            "Yes, Resto welcomes groups of up to 30 people. For groups of more than 8, please contact us directly by phone or email so we can agree on reception conditions, group menus and booking arrangements. Semi-private spaces are available.",
         },
         {
           question: "What payment methods are accepted?",
@@ -605,7 +605,7 @@ export const translations = {
       titrePage: "Let's get in touch",
       desc: "Our team is at your disposal for any question or special request.",
       informations: "INFORMATION",
-      lesDeuxColombes: "Les Deux Colombes",
+      lesDeuxColombes: "Resto",
       email: "Email",
       adresse: "Address",
       horaires: "Opening hours",
@@ -645,7 +645,7 @@ export const translations = {
     inscription: {
       titre: "Client Area",
       titrePage: "Create an account",
-      desc: "Join Les Deux Colombes and manage your reservations with ease.",
+      desc: "Join Resto and manage your reservations with ease.",
       prenom: "First name",
       nom: "Last name",
       telephone: "Phone",

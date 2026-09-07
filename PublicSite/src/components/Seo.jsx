@@ -7,8 +7,8 @@ function Seo ({
   image = '/og-image.jpg',
   schema,
   keywords,
-  author = 'Les Deux Colombes',
-  imageAlt = 'Les Deux Colombes Restaurant'
+  author = 'Resto',
+  imageAlt = 'Resto Restaurant'
 }) {
   const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://lesdeuxcolombes.fr'
   const fullUrl = `${SITE_URL}${url}`
@@ -34,7 +34,7 @@ function Seo ({
       <meta property='og:description' content={description} />
       <meta property='og:url' content={fullUrl} />
       <meta property='og:type' content='website' />
-      <meta property='og:site_name' content='Les Deux Colombes' />
+      <meta property='og:site_name' content='Resto' />
       <meta property='og:locale' content='fr_FR' />
       {image && (
         <>

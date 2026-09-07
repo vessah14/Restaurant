@@ -8,10 +8,10 @@ export default function Reserver () {
   return (
     <>
       <Seo
-        title='Réserver une Table — Les Deux Colombes | Restaurant à Paris'
-        description='Réservez votre table en ligne aux Deux Colombes. Restaurant français à Paris, à deux pas de Notre-Dame. Disponibilités en temps réel et confirmation immédiate.'
+        title='Réserver une Table — Resto | Restaurant à Paris'
+        description='Réservez votre table en ligne chez Resto. Restaurant français à Paris, à deux pas de Notre-Dame. Disponibilités en temps réel et confirmation immédiate.'
         url='/Reserver'
-        keywords='réserver table, réservation restaurant, Paris, Notre-Dame, Les Deux Colombes, booking'
+        keywords='réserver table, réservation restaurant, Paris, Notre-Dame, Resto, booking'
       />
       <div className='bg-[#f5f1ea]'>
         <Navbarre2 />

@@ -73,7 +73,7 @@ fs.writeFileSync("public/sitemap.xml", xml);
 // ---------------------------------------------------------------------------
 // Génération du robots.txt
 // ---------------------------------------------------------------------------
-const robots = `# Robots.txt pour Les Deux Colombes - Restaurant
+const robots = `# Robots.txt pour Resto - Restaurant
 
 # Allow all crawlers by default
 User-agent: *

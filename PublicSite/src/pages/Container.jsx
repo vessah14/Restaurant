@@ -26,14 +26,14 @@ export default function Container () {
   return (
     <>
       <Seo
-        title='Les Deux Colombes — Restaurant français gastronomique à Paris 4ème'
-        description='Découvrez Les Deux Colombes, restaurant français traditionnel gastronomique à Paris, à deux pas de Notre-Dame. Réservez votre table pour une expérience culinaire authentique.'
+        title='Resto — Restaurant français gastronomique à Paris 4ème'
+        description='Découvrez Resto, restaurant français traditionnel gastronomique à Paris, à deux pas de Notre-Dame. Réservez votre table pour une expérience culinaire authentique.'
         url='/'
         keywords='restaurant français, Paris, Notre-Dame, cuisine gastronomique, restaurant traditionnel, réservation table Paris'
         schema={{
           '@context': 'https://schema.org',
           '@type': 'Restaurant',
-          name: 'Les Deux Colombes',
+          name: 'Resto',
           image: ['https://lesdeuxcolombes.fr/og-image.jpg'],
           description:
             'Restaurant français traditionnel gastronomique à Paris, à deux pas de Notre-Dame',

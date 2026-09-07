@@ -8,10 +8,10 @@ export default function Contact () {
   return (
     <>
       <Seo
-        title='Nous Contacter — Les Deux Colombes | Restaurant à Paris'
-        description='Contactez Les Deux Colombes pour toute demande. Adresse, téléphone, email, horaires et formulaire de contact. À deux pas de Notre-Dame de Paris.'
+        title='Nous Contacter — Resto | Restaurant à Paris'
+        description='Contactez Resto pour toute demande. Adresse, téléphone, email, horaires et formulaire de contact. À deux pas de Notre-Dame de Paris.'
         url='/Contact'
-        keywords='contact restaurant, téléphone, email, adresse, horaires, Les Deux Colombes, Paris'
+        keywords='contact restaurant, téléphone, email, adresse, horaires, Resto, Paris'
       />
       <div className='bg-[#f5f1ea]'>
         <Navbarre2 />

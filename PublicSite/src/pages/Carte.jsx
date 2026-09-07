@@ -19,7 +19,7 @@ export default function CartePricipal () {
   return (
     <>
       <Seo
-        title='Notre Carte — Cuisine Française Traditionnelle | Les Deux Colombes'
+        title='Notre Carte — Cuisine Française Traditionnelle | Resto'
         description='Découvrez notre carte de cuisine française traditionnelle avec des plats authentiques, viandes, poissons et vins sélectionnés. À deux pas de Notre-Dame de Paris.'
         url='/Carte'
         keywords='carte restaurant, cuisine française, plats français, vins, Paris, Notre-Dame, restaurant gastronomique'

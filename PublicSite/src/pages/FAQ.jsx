@@ -9,8 +9,8 @@ export default function FAQ () {
   return (
     <>
       <Seo
-        title='Questions Fréquentes — Les Deux Colombes | Réponses et Informations'
-        description='Consultez nos questions fréquentes : horaires, tarifs, réservations, accès pour handicapés, allergies alimentaires, événements privés. Toutes les informations sur Les Deux Colombes.'
+        title='Questions Fréquentes — Resto | Réponses et Informations'
+        description='Consultez nos questions fréquentes : horaires, tarifs, réservations, accès pour handicapés, allergies alimentaires, événements privés. Toutes les informations sur Resto.'
         url='/FAQ'
         keywords='FAQ, questions fréquentes, horaires, réservation, tarifs, allergie, restaurant Paris'
       />
