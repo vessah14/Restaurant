@@ -6,9 +6,9 @@ namespace Backend.Models
         public long Id { get; set; }
 
         public long PlatId { get; set; }
-[MaxLength(10)]
+        [MaxLength(10)]
         public string Langue { get; set; } = string.Empty;
-[MaxLength(50)]
+        [MaxLength(150)]
         public string Nom { get; set; } = string.Empty;
 
         public string? Description { get; set; }

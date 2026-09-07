@@ -121,6 +121,11 @@ export default function Menu () {
       return
     }
 
+    if (formData.nom.trim().length > 150) {
+      setUploadError('Le nom du plat ne peut pas dépasser 150 caractères.')
+      return
+    }
+
     if (formData.prix === '' || Number(formData.prix) < 0) {
       setUploadError('Le prix du plat doit être supérieur ou égal à 0.')
       return
@@ -395,6 +400,7 @@ export default function Menu () {
                   name='nom'
                   value={formData.nom}
                   onChange={handleInputChange}
+                  maxLength={150}
                   required
                   className='w-full rounded-lg border border-[#E2DCCB] px-4 py-3 text-sm text-[#1A1D24] focus:outline-none focus:ring-2 focus:ring-[#D9A15C]'
                 />
