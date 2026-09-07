@@ -178,6 +178,40 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
         });
         await db.SaveChangesAsync();
     }
+
+    var categoriesParDefaut = new[]
+    {
+        (Code: "entrees", Ordre: 1, NomFr: "Entrees", NomEn: "Starters"),
+        (Code: "plats", Ordre: 2, NomFr: "Plats", NomEn: "Main courses"),
+        (Code: "desserts", Ordre: 3, NomFr: "Desserts", NomEn: "Desserts"),
+        (Code: "boissons", Ordre: 4, NomFr: "Boissons", NomEn: "Drinks")
+    };
+
+    foreach (var categorieDefaut in categoriesParDefaut)
+    {
+        var categorie = await db.CategoriesMenu
+            .Include(c => c.Traductions)
+            .FirstOrDefaultAsync(c => c.Code == categorieDefaut.Code);
+
+        if (categorie is null)
+        {
+            categorie = new Backend.Models.CategorieMenu
+            {
+                Code = categorieDefaut.Code,
+                OrdreAffichage = categorieDefaut.Ordre
+            };
+            db.CategoriesMenu.Add(categorie);
+            await db.SaveChangesAsync();
+        }
+
+        if (!categorie.Traductions.Any(t => t.Langue == "fr"))
+            categorie.Traductions.Add(new Backend.Models.CategorieMenuTraduction { Langue = "fr", Nom = categorieDefaut.NomFr });
+
+        if (!categorie.Traductions.Any(t => t.Langue == "en"))
+            categorie.Traductions.Add(new Backend.Models.CategorieMenuTraduction { Langue = "en", Nom = categorieDefaut.NomEn });
+    }
+
+    await db.SaveChangesAsync();
 }
 
 if (app.Environment.IsProduction())
