@@ -24,6 +24,7 @@ Dans le service `Backend`, ajoutez ces variables Render :
 - `FrontendUrl` avec l'URL publique du site
 - `Cors__AllowedOrigins__0` avec l'URL publique du site
 - `Cors__AllowedOrigins__1` avec l'URL publique de l'administration
+- `Cors__AllowedOrigins__2=https://vessah14.github.io` pour le deploiement GitHub Pages
 - `Database__ApplyMigrations=true`
 - `ASPNETCORE_URLS=http://+:8080`
 

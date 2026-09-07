@@ -4,8 +4,7 @@ export const authApi = {
   login: (identifiant, motDePasse) =>
     api.post("/api/Auth/login", { nom: identifiant, motDePasse }),
 
-  inscription: (donnees) =>
-    api.post("/api/Auth/inscription", donnees),
+  inscription: (donnees) => api.post("/api/Auth/inscription", donnees),
 
   motDePasseOublie: (email) =>
     api.post("/api/Auth/mot-de-passe-oublie", { email }),
