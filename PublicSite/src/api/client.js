@@ -25,7 +25,9 @@ async function request(endpoint, options = {}) {
 
   if (!response.ok) {
     const erreur = await response.json().catch(() => null);
-    throw new Error(erreur?.message || `Erreur ${response.status}`);
+    const error = new Error(erreur?.message || `Erreur ${response.status}`);
+    error.status = response.status;
+    throw error;
   }
 
   if (response.status === 204) return null; // pas de contenu (DELETE, etc.)

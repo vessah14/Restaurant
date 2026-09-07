@@ -87,9 +87,12 @@ function Forms () {
       // le client accède à son espace client
       navigate(utilisateur.role === 'admin' ? '/admin' : '/Compte')
     } catch (err) {
-      // Le backend renvoie volontairement un message générique
-      // ("Email ou mot de passe incorrect.") sans préciser lequel est faux
-      setErrors({ motDePasse: err.message })
+      setErrors({
+        motDePasse:
+          err.status === 429
+            ? 'Trop de tentatives. Réessayez dans une minute.'
+            : err.message || 'Nom ou mot de passe incorrect.'
+      })
     } finally {
       setChargement(false)
     }

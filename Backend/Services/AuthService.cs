@@ -27,7 +27,11 @@ namespace Backend.Services
 
         public async Task<LoginResponseDto?> ConnexionAsync(LoginDto dto)
         {
-            var identifiant = dto.Nom.Trim().ToLower();
+            var identifiant = dto.Identifiant.Trim().ToLowerInvariant();
+
+            if (string.IsNullOrWhiteSpace(identifiant) ||
+                string.IsNullOrWhiteSpace(dto.MotDePasse))
+                return null;
 
             var utilisateur = await _context.Utilisateurs
                 .FirstOrDefaultAsync(u =>

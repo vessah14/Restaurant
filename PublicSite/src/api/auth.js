@@ -4,6 +4,7 @@ export const authApi = {
   login: (identifiant, motDePasse) =>
     api.post("/api/Auth/login", {
       nom: identifiant.trim(),
+      email: identifiant.trim(),
       motDePasse,
     }),
 

@@ -3,7 +3,11 @@ namespace Backend.Dtos.Auth
     public class LoginDto
     {
         public string Nom { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string MotDePasse { get; set; } = string.Empty;
+
+        public string Identifiant =>
+            string.IsNullOrWhiteSpace(Nom) ? Email : Nom;
     }
 
     public class LoginResponseDto
