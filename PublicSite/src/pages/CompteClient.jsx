@@ -162,10 +162,10 @@ export default function CompteClient () {
         )}
 
         {/* Onglets */}
-        <div className='flex gap-4 mb-8 border-b border-gray-300'>
+        <div className='flex gap-4 mb-8 overflow-x-auto border-b border-gray-300'>
           <button
             onClick={() => setOnglet('reservations')}
-            className={`pb-4 font-semibold transition ${
+            className={`shrink-0 pb-4 font-semibold transition ${
               onglet === 'reservations'
                 ? 'text-[#C4A060] border-b-2 border-[#C4A060]'
                 : 'text-gray-600 hover:text-gray-800'
@@ -175,7 +175,7 @@ export default function CompteClient () {
           </button>
           <button
             onClick={() => setOnglet('profil')}
-            className={`pb-4 font-semibold transition ${
+            className={`shrink-0 pb-4 font-semibold transition ${
               onglet === 'profil'
                 ? 'text-[#C4A060] border-b-2 border-[#C4A060]'
                 : 'text-gray-600 hover:text-gray-800'
@@ -185,7 +185,7 @@ export default function CompteClient () {
           </button>
           <button
             onClick={() => setOnglet('avis')}
-            className={`pb-4 font-semibold transition ${
+            className={`shrink-0 pb-4 font-semibold transition ${
               onglet === 'avis'
                 ? 'text-[#C4A060] border-b-2 border-[#C4A060]'
                 : 'text-gray-600 hover:text-gray-800'
