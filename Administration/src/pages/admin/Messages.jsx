@@ -102,7 +102,7 @@ export default function Messages () {
             {messages.length} message{messages.length > 1 ? 's' : ''}
           </p>
         </div>
-        <div className='flex gap-2'>
+        <div className='flex max-w-full flex-wrap gap-2'>
           {['all', 'nouveau', 'lu', 'repondu'].map(f => (
             <button
               key={f}

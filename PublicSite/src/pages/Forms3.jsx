@@ -150,7 +150,7 @@ export default function Forms3 ({ reservation, setReservation, setStep }) {
               </div>
             )}
 
-            <div className='flex gap-4 mt-10'>
+            <div className='mt-10 flex flex-col gap-4 sm:flex-row'>
               <button
                 onClick={() => setStep(2)}
                 disabled={loading}

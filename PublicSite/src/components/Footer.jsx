@@ -9,13 +9,13 @@ export default function Footer () {
   return (
     <>
       <footer className='bg-gray-900 mt-15  '>
-        <div className='  flex justify-center items-center flex-col p-6 mx-auto '>
-          <div className='lg:flex gap-100'>
-            <div className='w-full -mx-6 lg:w-2/5 '>
-              <div className='px-6'>
+        <div className='mx-auto flex w-full max-w-7xl flex-col items-center justify-center p-4 sm:p-6'>
+          <div className='grid w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16'>
+            <div className='w-full'>
+              <div>
                 <Link to='/About'>
                   {/* Logo */}
-                  <div className=' flex flex-col justify-center shrink-0 text-white ml-20'>
+                  <div className='flex flex-col justify-center shrink-0 text-white'>
                     <h1 className="text-2xl tracking-[0.2em] font-bold font-['Playfair_Display'] ">
                       Les Deux Colombes
                     </h1>
@@ -29,11 +29,11 @@ export default function Footer () {
                   </div>
                 </Link>
 
-                <p className='max-w-sm mt-2 text-white ml-20'>
+                <p className='mt-2 max-w-sm text-white'>
                   {t.footer.descendant}
                 </p>
 
-                <div className='flex mt-6 -mx-2 text-white ml-20'>
+                <div className='mt-6 flex text-white'>
                   <a
                     href='#'
                     className='mx-2  transition-colors duration-300  hover:text-blue-500 dark:hover:text-blue-400'
@@ -82,7 +82,7 @@ export default function Footer () {
               </div>
             </div>
 
-            <div className='mt-6 lg:mt-0 lg:flex-1'>
+            <div className='w-full'>
               <div className=' text-white grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
                 <div className='flex flex-col space-y-2'>
                   <h3 className=' uppercase font-semibold text-[#C4A060] '>
@@ -163,9 +163,9 @@ export default function Footer () {
             </div>
           </div>
 
-          <hr className=' h-px my-6 bg-gray-200 w-full lg:w-400 ' />
+          <hr className='my-6 h-px w-full bg-gray-200' />
 
-          <div className='flex flex-wrap sm:gap-210 lg:gap-210 xl:gap-210 space-y-2 '>
+          <div className='flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between'>
             <LanguageSwitcher />
 
             <span className=' text-gray-500 text-sm '>

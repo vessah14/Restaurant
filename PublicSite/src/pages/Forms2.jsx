@@ -147,7 +147,7 @@ export default function Forms2 ({ reservation, setReservation, setStep }) {
           </div>
         </div>
 
-        <div className='flex gap-3 mt-8'>
+        <div className='mt-8 flex flex-col gap-3 sm:flex-row'>
           <button
             onClick={() => setStep(1)}
             className='flex-1 border border-gray-300 rounded-lg py-3 font-medium text-gray-700 hover:bg-gray-50 transition'

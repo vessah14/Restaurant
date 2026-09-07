@@ -139,7 +139,7 @@ export default function HideBar ({
                 className='fixed inset-0 z-10'
                 onClick={() => setIsOpen(false)}
               />
-              <div className='absolute right-0 top-full mt-2 z-20 w-96 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden'>
+              <div className='absolute right-0 top-full z-20 mt-2 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl'>
                 {/* Header du dropdown */}
                 <div className='flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50'>
                   <h3 className='font-semibold text-slate-900'>

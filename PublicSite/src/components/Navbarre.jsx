@@ -121,7 +121,7 @@ export default function Navbarre () {
       ${navbar ? 'bg-[#f5f1ea] backdrop-blur-lg shadow-xl' : 'bg-transparent'}
       `}
     >
-      <div className='mx-auto max-w-7xl px-6 '>
+      <div className='mx-auto max-w-7xl px-4 sm:px-6'>
         <div className='relative flex h-20 items-center justify-between'>
           {/* LOGO */}
 
@@ -160,7 +160,7 @@ export default function Navbarre () {
           <div
             className='
             hidden
-            sm:flex
+            lg:flex
             items-center
             gap-14
             '
@@ -269,7 +269,7 @@ export default function Navbarre () {
 
           {/*================ MENU MOBILE ================*/}
 
-          <div className='flex items-center gap-3 sm:hidden'>
+          <div className='flex items-center gap-3 lg:hidden'>
             <DisclosureButton
               className={`
               group

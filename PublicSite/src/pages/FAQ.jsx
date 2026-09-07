@@ -60,7 +60,7 @@ function Body () {
             {t.faqPage.pasTrouve}
           </h1>
           <p className='text-gray-500'>{t.faqPage.pasTrouveDesc}</p>
-          <div className='mt-5 flex justify-center items-center gap-10'>
+          <div className='mt-5 flex w-full flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:gap-10'>
             <Link
               to='/Contact'
               className='p-2 px-8 py-3 font-semibold rounded-xl border hover:bg-gray-50/10'

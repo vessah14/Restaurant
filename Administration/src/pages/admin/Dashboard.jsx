@@ -159,7 +159,7 @@ export default function Dashboard () {
             Vue d'ensemble de l'activité
           </p>
         </div>
-        <div className='flex gap-2'>
+        <div className='flex max-w-full flex-wrap gap-2'>
           <button
             onClick={() => setActiveView('overview')}
             className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${

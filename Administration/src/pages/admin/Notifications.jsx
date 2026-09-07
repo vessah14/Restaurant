@@ -153,7 +153,7 @@ export default function Notifications ({ onNotificationCountChange }) {
             Gestion des notifications du restaurant
           </p>
         </div>
-        <div className='flex gap-2'>
+        <div className='flex max-w-full flex-wrap gap-2'>
           <button
             onClick={handleMarquerTousLus}
             disabled={nonLues === 0}
