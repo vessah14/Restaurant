@@ -56,6 +56,13 @@ namespace Backend.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
+            catch (Exception ex)
+            {
+                HttpContext.RequestServices
+                    .GetRequiredService<ILogger<PlatsController>>()
+                    .LogError(ex, "Erreur lors de la creation du plat");
+                return StatusCode(500, new { message = "La creation du plat a echoue. Verifiez l'image et les donnees saisies." });
+            }
         }
 
         [Authorize(Roles = "admin")]
