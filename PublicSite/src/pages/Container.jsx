@@ -109,7 +109,7 @@ function HeaderTitle () {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <div className='flex min-h-[34rem] flex-col justify-center items-center px-4 py-16 sm:min-h-[40rem]'>
+          <div className='flex min-h-[42rem] flex-col justify-center items-center px-4 py-20 sm:min-h-[50rem] lg:min-h-[58rem]'>
             <span
               style={{ color: '#C4A060' }}
               className='md:text-sm text-xs font-light tracking-[0.3em]'
