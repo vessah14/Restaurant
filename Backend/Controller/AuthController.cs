@@ -25,5 +25,19 @@ namespace Backend.Controllers
                 ? Unauthorized(new { message = "Nom ou mot de passe incorrect." })
                 : Ok(resultat);
         }
+
+        [HttpPost("inscription")]
+        public async Task<ActionResult<LoginResponseDto>> Inscription(CreerUtilisateurDto dto)
+        {
+            try
+            {
+                var resultat = await _authService.InscriptionAsync(dto);
+                return Ok(resultat);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
