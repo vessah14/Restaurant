@@ -162,6 +162,22 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
     await db.Database.MigrateAsync();
+
+    if (!await db.Utilisateurs.AnyAsync(u => u.Role == "admin"))
+    {
+        db.Utilisateurs.Add(new Backend.Models.Utilisateur
+        {
+            Prenom = "Admin",
+            Nom = "admin",
+            Email = "Admin28@gmail.com",
+            MotDePasseHash = BCrypt.Net.BCrypt.HashPassword("Admin123", 11),
+            Telephone = "673054260",
+            Role = "admin",
+            Actif = true,
+            DateCreation = DateTime.UtcNow
+        });
+        await db.SaveChangesAsync();
+    }
 }
 
 if (app.Environment.IsProduction())

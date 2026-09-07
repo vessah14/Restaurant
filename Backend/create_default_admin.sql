@@ -13,7 +13,7 @@ VALUES (
     'admin',
     'Admin',
     'Admin28@gmail.com',
-    '$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy',
+    '$2a$11$W0ly9VieYXL5mil1LG5yW.3AIBwmrj/aA1HQAd1EdtM/571j7tskK',
     '673054260',
     'admin',
     true,
