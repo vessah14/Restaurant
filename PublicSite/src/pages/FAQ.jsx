@@ -54,8 +54,8 @@ function Body () {
   return (
     <>
       <FAQ1 />
-      <div className='flex justify-cente items-center flex-col mt-10'>
-        <div className='flex justify-cente items-center flex-col text-center p-5 bg-[#C4A060]/10 rounded-2xl w-200'>
+      <div className='flex justify-cente items-center flex-col mt-10 p-2'>
+        <div className='flex justify-cente items-center flex-col text-center p-5 bg-[#C4A060]/10 rounded-2xl w-full lg:w-200'>
           <h1 className="font-['Playfair_Display'] text-4xl font-medium mb-5">
             {t.faqPage.pasTrouve}
           </h1>

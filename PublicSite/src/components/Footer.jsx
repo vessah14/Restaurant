@@ -163,7 +163,7 @@ export default function Footer () {
             </div>
           </div>
 
-          <hr className=' h-px my-6 bg-gray-200 w-400 ' />
+          <hr className=' h-px my-6 bg-gray-200 w-full lg:w-400 ' />
 
           <div className='flex flex-wrap sm:gap-210 lg:gap-210 xl:gap-210 space-y-2 '>
             <LanguageSwitcher />
