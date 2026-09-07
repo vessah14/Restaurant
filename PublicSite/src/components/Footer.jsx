@@ -10,13 +10,13 @@ export default function Footer () {
     <>
       <footer className='bg-gray-900 mt-15  '>
         <div className='mx-auto flex w-full max-w-7xl flex-col items-center justify-center p-4 sm:p-6'>
-          <div className='grid w-full grid-cols-1 gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16'>
-            <div className='w-full'>
+          <div className='grid w-full min-w-0 grid-cols-1 gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16'>
+            <div className='w-full min-w-0'>
               <div>
                 <Link to='/About'>
                   {/* Logo */}
                   <div className='flex flex-col justify-center shrink-0 text-white'>
-                    <h1 className="text-2xl tracking-[0.2em] font-bold font-['Playfair_Display'] ">
+                    <h1 className="text-xl tracking-[0.12em] font-bold font-['Playfair_Display'] sm:text-2xl sm:tracking-[0.2em]">
                       Les Deux Colombes
                     </h1>
 
@@ -82,7 +82,7 @@ export default function Footer () {
               </div>
             </div>
 
-            <div className='w-full'>
+            <div className='w-full min-w-0'>
               <div className=' text-white grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
                 <div className='flex flex-col space-y-2'>
                   <h3 className=' uppercase font-semibold text-[#C4A060] '>
@@ -163,7 +163,7 @@ export default function Footer () {
             </div>
           </div>
 
-          <hr className='my-6 h-px w-full bg-gray-200' />
+          <hr className='my-6 h-px w-full border-0 bg-gray-200' />
 
           <div className='flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between'>
             <LanguageSwitcher />
