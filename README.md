@@ -28,7 +28,7 @@ Dans le service `Backend`, ajoutez ces variables Render :
 - `Database__ApplyMigrations=true`
 - `ASPNETCORE_URLS=http://+:8080`
 
-Pour les deployments Vercel actuels, configurez aussi `Cors__AllowedOrigins__0=https://public-site-orcin-delta.vercel.app`, `Cors__AllowedOrigins__1=https://administration-psi.vercel.app` et `FrontendUrl=https://public-site-orcin-delta.vercel.app`. La variable `ConnectionStrings__DefaultConnection` doit contenir la chaine MySQL publique fournie par Railway, avec son hote, port, base, utilisateur et mot de passe. Apres toute modification, redeployez le service Render.
+Pour les deployments Vercel actuels, configurez aussi `Cors__AllowedOrigins__0=https://public-site-orcin-delta.vercel.app`, `Cors__AllowedOrigins__1=https://administration-psi.vercel.app` et `FrontendUrl=https://public-site-orcin-delta.vercel.app`. La variable `ConnectionStrings__DefaultConnection` doit contenir la chaine PostgreSQL de Supabase (Connect > Session pooler), au format `Host=aws-0-xxx.pooler.supabase.com;Port=5432;Database=postgres;Username=postgres.xxx;Password=...;SSL Mode=Require`. Apres toute modification, redeployez le service Render.
 
 L'API actuellement deployee est disponible sur `https://restaurant-sxxt.onrender.com`. Les builds de `PublicSite` et `Administration` utilisent cette URL via leurs fichiers `.env.production`. Si vous configurez les variables directement dans Render, utilisez `VITE_API_URL=https://restaurant-sxxt.onrender.com` comme variable de build pour les deux frontends.
 

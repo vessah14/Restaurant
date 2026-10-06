@@ -27,12 +27,15 @@ builder.Services.AddControllers()
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// --- Connexion MySQL (WampServer) via Pomelo ---
+// --- Connexion PostgreSQL (Supabase) via Npgsql ---
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("ConnectionStrings:DefaultConnection est requis.");
 
+// Stocke les DateTime en "timestamp without time zone", comme les colonnes datetime de MySQL.
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 builder.Services.AddDbContext<RestaurantDbContext>(options =>
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options.UseNpgsql(connectionString, npgsql => npgsql.EnableRetryOnFailure()));
 
 builder.Services.AddHttpClient("DeepL");
 
