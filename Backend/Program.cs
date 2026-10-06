@@ -217,36 +217,4 @@ if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
     await db.SaveChangesAsync();
 }
 
-if (app.Environment.IsProduction())
-{
-    using var scope = app.Services.CreateScope();
-    var db = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
-    var connection = db.Database.GetDbConnection();
-    await connection.OpenAsync();
-
-    foreach (var table in new[] { "Plats", "Galeries" })
-    {
-        await using var existsCommand = connection.CreateCommand();
-        existsCommand.CommandText = """
-            SELECT COUNT(*)
-            FROM INFORMATION_SCHEMA.COLUMNS
-            WHERE TABLE_SCHEMA = DATABASE()
-              AND TABLE_NAME = @table
-              AND COLUMN_NAME = 'ImagePublicId'
-            """;
-        var tableParameter = existsCommand.CreateParameter();
-        tableParameter.ParameterName = "@table";
-        tableParameter.Value = table;
-        existsCommand.Parameters.Add(tableParameter);
-
-        var exists = Convert.ToInt32(await existsCommand.ExecuteScalarAsync()) > 0;
-        if (!exists)
-        {
-            await using var alterCommand = connection.CreateCommand();
-            alterCommand.CommandText = $"ALTER TABLE `{table}` ADD COLUMN `ImagePublicId` varchar(255) NULL";
-            await alterCommand.ExecuteNonQueryAsync();
-        }
-    }
-}
-
 app.Run();
